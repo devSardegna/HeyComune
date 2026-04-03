@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HeyComune! — Segnalazioni</title>
+<title>CittàAttiva — Segnalazioni</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -20,8 +20,9 @@
     --accent: #d4380d;
     --accent-soft: #fff1ee;
     --accent-border: #f5a28a;
+    --dislike-soft: #f3f0ea;
+    --dislike-border: #c9bfad;
     --green: #2d7a4f;
-    --green-soft: #edf7f2;
     --border: #e2d9c8;
     --shadow: 0 2px 12px rgba(26,20,8,0.08);
     --shadow-lg: 0 8px 32px rgba(26,20,8,0.14);
@@ -42,7 +43,6 @@
     overflow: hidden;
   }
 
-  /* HEADER */
   header {
     background: var(--surface);
     border-bottom: 1px solid var(--border);
@@ -55,529 +55,207 @@
     z-index: 1000;
   }
 
-  .logo {
-    font-family: var(--font-display);
-    font-size: 1.25rem;
-    color: var(--ink);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
+  .logo { font-family: var(--font-display); font-size: 1.25rem; color: var(--ink); display: flex; align-items: center; gap: 8px; }
+  .logo-dot { width: 10px; height: 10px; background: var(--accent); border-radius: 50%; display: inline-block; }
+  .header-actions { display: flex; gap: 8px; align-items: center; }
 
-  .logo-dot {
-    width: 10px; height: 10px;
-    background: var(--accent);
-    border-radius: 50%;
-    display: inline-block;
-  }
-
-  .header-actions {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-  }
-
-  /* BUTTONS */
   .btn {
-    font-family: var(--font-body);
-    font-size: 0.85rem;
-    font-weight: 600;
-    padding: 8px 16px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    transition: all 0.15s;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
+    font-family: var(--font-body); font-size: 0.85rem; font-weight: 600;
+    padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer;
+    transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px;
   }
-
-  .btn-primary {
-    background: var(--accent);
-    color: white;
-  }
+  .btn-primary { background: var(--accent); color: white; }
   .btn-primary:hover { background: #b52e09; transform: translateY(-1px); box-shadow: var(--shadow); }
-
-  .btn-ghost {
-    background: transparent;
-    color: var(--ink-soft);
-    border: 1px solid var(--border);
-  }
+  .btn-ghost { background: transparent; color: var(--ink-soft); border: 1px solid var(--border); }
   .btn-ghost:hover { background: var(--bg); color: var(--ink); }
-
   .btn-sm { padding: 5px 12px; font-size: 0.78rem; }
 
-  /* LAYOUT */
-  .app-body {
-    display: flex;
-    flex: 1;
-    overflow: hidden;
-  }
+  .app-body { display: flex; flex: 1; overflow: hidden; }
+  #map { flex: 1; z-index: 1; }
 
-  /* MAP */
-  #map {
-    flex: 1;
-    z-index: 1;
-  }
-
-  /* Leaflet marker overrides */
-  .custom-marker {
-    background: var(--accent);
-    border: 2px solid white;
-    border-radius: 50% 50% 50% 0;
-    transform: rotate(-45deg);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-  }
-
-  /* SIDEBAR */
   .sidebar {
-    width: 360px;
-    background: var(--surface);
+    width: 360px; background: var(--surface);
     border-left: 1px solid var(--border);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    flex-shrink: 0;
+    display: flex; flex-direction: column;
+    overflow: hidden; flex-shrink: 0;
   }
 
-  .sidebar-tabs {
-    display: flex;
-    border-bottom: 1px solid var(--border);
-    flex-shrink: 0;
-  }
+  .sidebar-tabs { display: flex; border-bottom: 1px solid var(--border); flex-shrink: 0; }
 
   .tab {
-    flex: 1;
-    padding: 14px 8px;
-    font-size: 0.82rem;
-    font-weight: 600;
-    text-align: center;
-    cursor: pointer;
-    color: var(--ink-soft);
-    border-bottom: 2px solid transparent;
-    transition: all 0.15s;
-    background: none;
-    border-top: none;
-    border-left: none;
-    border-right: none;
+    flex: 1; padding: 14px 8px; font-size: 0.82rem; font-weight: 600;
+    text-align: center; cursor: pointer; color: var(--ink-soft);
+    border-bottom: 2px solid transparent; transition: all 0.15s;
+    background: none; border-top: none; border-left: none; border-right: none;
     font-family: var(--font-body);
   }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); background: var(--accent-soft); }
 
-  .tab.active {
-    color: var(--accent);
-    border-bottom-color: var(--accent);
-    background: var(--accent-soft);
+  .filter-bar {
+    padding: 10px 16px; border-bottom: 1px solid var(--border);
+    display: flex; gap: 6px; overflow-x: auto; flex-shrink: 0; scrollbar-width: none;
   }
+  .filter-bar::-webkit-scrollbar { display: none; }
 
-  .sidebar-content {
-    flex: 1;
-    overflow-y: auto;
-    padding: 16px;
+  .filter-chip {
+    flex-shrink: 0; font-size: 0.75rem; font-weight: 600;
+    padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border);
+    background: var(--bg); color: var(--ink-soft); cursor: pointer;
+    font-family: var(--font-body); transition: all 0.15s; white-space: nowrap;
   }
+  .filter-chip.active { background: var(--ink); color: white; border-color: var(--ink); }
 
-  /* CARD SEGNALAZIONE */
+  .sidebar-content { flex: 1; overflow-y: auto; padding: 16px; }
+
   .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 14px;
-    margin-bottom: 10px;
-    cursor: pointer;
-    transition: all 0.15s;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 14px; margin-bottom: 10px;
+    cursor: pointer; transition: all 0.15s;
   }
-
-  .card:hover {
-    border-color: var(--accent-border);
-    box-shadow: var(--shadow);
-    transform: translateY(-1px);
-  }
+  .card:hover { border-color: var(--accent-border); box-shadow: var(--shadow); transform: translateY(-1px); }
 
   .card-cat {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 0.72rem;
-    font-weight: 600;
-    padding: 3px 8px;
-    border-radius: 20px;
-    margin-bottom: 8px;
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 0.72rem; font-weight: 600; padding: 3px 8px;
+    border-radius: 20px; margin-bottom: 8px;
   }
 
-  .card-title {
-    font-family: var(--font-display);
-    font-size: 1rem;
-    margin-bottom: 4px;
-    line-height: 1.3;
-  }
+  .card-title { font-family: var(--font-display); font-size: 1rem; margin-bottom: 4px; line-height: 1.3; }
 
   .card-desc {
-    font-size: 0.82rem;
-    color: var(--ink-soft);
-    line-height: 1.4;
-    margin-bottom: 10px;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    font-size: 0.82rem; color: var(--ink-soft); line-height: 1.4; margin-bottom: 10px;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
   }
 
-  .card-meta {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 0.78rem;
-    color: var(--ink-soft);
-  }
+  .card-meta { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: var(--ink-soft); flex-wrap: wrap; }
 
   .vote-btn {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    background: none;
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 3px 10px;
-    font-size: 0.78rem;
-    font-weight: 600;
-    cursor: pointer;
-    color: var(--ink-soft);
-    font-family: var(--font-body);
-    transition: all 0.15s;
+    display: flex; align-items: center; gap: 4px; background: none;
+    border: 1px solid var(--border); border-radius: 20px; padding: 3px 10px;
+    font-size: 0.78rem; font-weight: 600; cursor: pointer; color: var(--ink-soft);
+    font-family: var(--font-body); transition: all 0.15s;
   }
+  .vote-btn.like:hover, .vote-btn.like.voted { background: var(--accent-soft); border-color: var(--accent-border); color: var(--accent); }
+  .vote-btn.dislike:hover, .vote-btn.dislike.voted { background: var(--dislike-soft); border-color: var(--dislike-border); color: var(--ink-soft); }
 
-  .vote-btn:hover, .vote-btn.voted {
-    background: var(--accent-soft);
-    border-color: var(--accent-border);
-    color: var(--accent);
-  }
+  .score-bar { height: 4px; border-radius: 4px; background: var(--border); margin: 8px 0; overflow: hidden; }
+  .score-fill { height: 100%; border-radius: 4px; background: var(--green); transition: width 0.3s; }
+  .score-fill.negative { background: #c0392b; }
 
-  .card-img {
-    width: 100%;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 10px;
-  }
+  .card-img { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; }
 
-  /* PANNELLO DETTAGLIO */
-  .detail-panel {
-    display: none;
-    flex-direction: column;
-    height: 100%;
-  }
-
+  .detail-panel { display: none; flex-direction: column; height: 100%; }
   .detail-panel.active { display: flex; }
 
-  .detail-header {
-    padding: 16px;
-    border-bottom: 1px solid var(--border);
-    flex-shrink: 0;
-  }
+  .detail-header { padding: 16px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
 
   .detail-back {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.82rem;
-    color: var(--ink-soft);
-    cursor: pointer;
-    margin-bottom: 12px;
-    background: none;
-    border: none;
-    font-family: var(--font-body);
+    display: flex; align-items: center; gap: 6px; font-size: 0.82rem;
+    color: var(--ink-soft); cursor: pointer; margin-bottom: 12px;
+    background: none; border: none; font-family: var(--font-body);
   }
-
   .detail-back:hover { color: var(--ink); }
 
-  .detail-title {
-    font-family: var(--font-display);
-    font-size: 1.3rem;
-    line-height: 1.3;
-    margin-bottom: 8px;
-  }
-
-  .detail-body {
-    flex: 1;
-    overflow-y: auto;
-    padding: 16px;
-  }
-
-  .detail-desc {
-    font-size: 0.88rem;
-    color: var(--ink-soft);
-    line-height: 1.6;
-    margin-bottom: 16px;
-  }
-
-  .detail-img {
-    width: 100%;
-    border-radius: 10px;
-    margin-bottom: 16px;
-  }
-
-  .detail-stats {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 16px;
-  }
+  .detail-title { font-family: var(--font-display); font-size: 1.3rem; line-height: 1.3; margin-bottom: 10px; }
+  .detail-stats { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
 
   .stat-pill {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    background: var(--bg);
-    border-radius: 20px;
-    padding: 5px 12px;
-    font-size: 0.8rem;
-    font-weight: 600;
+    display: flex; align-items: center; gap: 5px; background: var(--bg);
+    border-radius: 20px; padding: 5px 12px; font-size: 0.8rem; font-weight: 600;
   }
 
-  .comments-title {
-    font-weight: 600;
-    font-size: 0.88rem;
-    margin-bottom: 10px;
-    color: var(--ink);
-  }
+  .vote-row { display: flex; gap: 8px; align-items: center; }
+  .detail-body { flex: 1; overflow-y: auto; padding: 16px; }
+  .detail-desc { font-size: 0.88rem; color: var(--ink-soft); line-height: 1.6; margin-bottom: 16px; }
+  .detail-img { width: 100%; border-radius: 10px; margin-bottom: 16px; }
+  .comments-title { font-weight: 600; font-size: 0.88rem; margin-bottom: 10px; color: var(--ink); }
 
-  .comment {
-    background: var(--bg);
-    border-radius: 8px;
-    padding: 10px 12px;
-    margin-bottom: 8px;
-    font-size: 0.82rem;
-    line-height: 1.5;
-  }
+  .comment { background: var(--bg); border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; font-size: 0.82rem; line-height: 1.5; }
+  .comment-meta { font-size: 0.72rem; color: var(--ink-soft); margin-bottom: 3px; }
 
-  .comment-meta {
-    font-size: 0.72rem;
-    color: var(--ink-soft);
-    margin-bottom: 3px;
-  }
-
-  .comment-form {
-    border-top: 1px solid var(--border);
-    padding: 12px 16px;
-    flex-shrink: 0;
-  }
+  .comment-form { border-top: 1px solid var(--border); padding: 12px 16px; flex-shrink: 0; }
 
   .comment-input {
-    width: 100%;
-    font-family: var(--font-body);
-    font-size: 0.85rem;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 10px 12px;
-    background: var(--bg);
-    color: var(--ink);
-    resize: none;
-    margin-bottom: 8px;
+    width: 100%; font-family: var(--font-body); font-size: 0.85rem;
+    border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px;
+    background: var(--bg); color: var(--ink); resize: none; margin-bottom: 8px;
   }
-
   .comment-input:focus { outline: none; border-color: var(--accent-border); }
 
-  /* FORM NUOVA SEGNALAZIONE */
   .form-panel { display: none; }
   .form-panel.active { display: block; }
-
   .form-group { margin-bottom: 14px; }
 
   label {
-    display: block;
-    font-size: 0.8rem;
-    font-weight: 600;
-    margin-bottom: 5px;
-    color: var(--ink-soft);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 5px;
+    color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.05em;
   }
 
   input[type=text], textarea, select {
-    width: 100%;
-    font-family: var(--font-body);
-    font-size: 0.88rem;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 10px 12px;
-    background: var(--bg);
-    color: var(--ink);
-    transition: border-color 0.15s;
+    width: 100%; font-family: var(--font-body); font-size: 0.88rem;
+    border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px;
+    background: var(--bg); color: var(--ink); transition: border-color 0.15s;
   }
-
-  input[type=text]:focus, textarea:focus, select:focus {
-    outline: none;
-    border-color: var(--accent-border);
-    background: var(--surface);
-  }
-
+  input[type=text]:focus, textarea:focus, select:focus { outline: none; border-color: var(--accent-border); background: var(--surface); }
   textarea { resize: vertical; min-height: 80px; }
 
-  .location-row {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-  }
+  .location-row { display: flex; gap: 8px; align-items: center; }
+  .location-display { flex: 1; font-size: 0.82rem; color: var(--ink-soft); background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
 
-  .location-display {
-    flex: 1;
-    font-size: 0.82rem;
-    color: var(--ink-soft);
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 10px 12px;
-  }
-
-  .foto-preview {
-    width: 100%;
-    border-radius: 8px;
-    margin-top: 8px;
-    display: none;
-  }
-
-  .file-label {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 12px;
-    border: 1px dashed var(--border);
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 0.85rem;
-    color: var(--ink-soft);
-    transition: all 0.15s;
-  }
-
+  .file-label { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border: 1px dashed var(--border); border-radius: 8px; cursor: pointer; font-size: 0.85rem; color: var(--ink-soft); transition: all 0.15s; }
   .file-label:hover { border-color: var(--accent-border); color: var(--accent); }
+  .foto-preview { width: 100%; border-radius: 8px; margin-top: 8px; display: none; }
 
-  /* TOAST */
+  .cat-buche         { background: #fef3c7; color: #92400e; }
+  .cat-illuminazione { background: #ede9fe; color: #5b21b6; }
+  .cat-rifiuti       { background: #d1fae5; color: #065f46; }
+  .cat-verde         { background: #dcfce7; color: #166534; }
+  .cat-segnaletica   { background: #dbeafe; color: #1e40af; }
+  .cat-accessibilita { background: #fce7f3; color: #9d174d; }
+  .cat-acqua         { background: #e0f2fe; color: #0c4a6e; }
+  .cat-cantieri      { background: #fff7ed; color: #9a3412; }
+  .cat-viabilita     { background: #f1f5f9; color: #334155; }
+  .cat-altro         { background: #f3f4f6; color: #374151; }
+
   .toast {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
+    position: fixed; bottom: 20px; left: 50%;
     transform: translateX(-50%) translateY(80px);
-    background: var(--ink);
-    color: white;
-    padding: 12px 20px;
-    border-radius: 10px;
-    font-size: 0.85rem;
-    font-weight: 500;
-    z-index: 9999;
-    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    white-space: nowrap;
+    background: var(--ink); color: white; padding: 12px 20px;
+    border-radius: 10px; font-size: 0.85rem; font-weight: 500;
+    z-index: 9999; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); white-space: nowrap;
   }
-
   .toast.show { transform: translateX(-50%) translateY(0); }
 
-  /* MODAL picking posizione */
-  .map-pick-overlay {
-    display: none;
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(26,20,8,0.3);
-    z-index: 500;
-    align-items: center;
-    justify-content: center;
-  }
+  .map-pick-overlay { display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 500; pointer-events: none; }
+  .map-pick-overlay.active { display: block; pointer-events: all; }
+  .map-pick-hint { background: var(--surface); border-radius: var(--radius); padding: 14px 20px; font-size: 0.88rem; font-weight: 600; box-shadow: var(--shadow-lg); position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); pointer-events: none; white-space: nowrap; }
 
-  .map-pick-overlay.active { display: flex; }
-
-  .map-pick-hint {
-    background: var(--surface);
-    border-radius: var(--radius);
-    padding: 14px 20px;
-    font-size: 0.88rem;
-    font-weight: 600;
-    box-shadow: var(--shadow-lg);
-    pointer-events: none;
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  /* CATEGORIE COLORI */
-  .cat-buche { background: #fef3c7; color: #92400e; }
-  .cat-illuminazione { background: #ede9fe; color: #5b21b6; }
-  .cat-rifiuti { background: #d1fae5; color: #065f46; }
-  .cat-verde { background: #dcfce7; color: #166534; }
-  .cat-segnaletica { background: #dbeafe; color: #1e40af; }
-  .cat-altro { background: #f3f4f6; color: #374151; }
-
-  /* EMPTY STATE */
-  .empty {
-    text-align: center;
-    padding: 40px 20px;
-    color: var(--ink-soft);
-  }
-
+  .empty { text-align: center; padding: 40px 20px; color: var(--ink-soft); }
   .empty-icon { font-size: 2.5rem; margin-bottom: 12px; }
   .empty-title { font-family: var(--font-display); font-size: 1.1rem; margin-bottom: 6px; color: var(--ink); }
   .empty-desc { font-size: 0.85rem; line-height: 1.5; }
 
-  /* BADGE CONTATORE */
-  .badge {
-    background: var(--accent);
-    color: white;
-    border-radius: 10px;
-    padding: 1px 7px;
-    font-size: 0.72rem;
-    font-weight: 700;
-  }
-
-  /* MAPPA — marker popup override */
-  .leaflet-popup-content-wrapper {
-    border-radius: 10px !important;
-    box-shadow: var(--shadow-lg) !important;
-    font-family: var(--font-body) !important;
-    border: 1px solid var(--border) !important;
-  }
-
-  .popup-inner { padding: 4px 2px; min-width: 160px; }
-  .popup-cat { font-size: 0.72rem; font-weight: 600; margin-bottom: 4px; }
-  .popup-title { font-family: var(--font-display); font-size: 0.95rem; margin-bottom: 8px; }
-  .popup-open { font-size: 0.78rem; color: var(--accent); font-weight: 600; cursor: pointer; background: none; border: none; padding: 0; font-family: var(--font-body); }
-
-  /* MOBILE */
-  @media (max-width: 640px) {
-    .sidebar {
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      width: 100%;
-      height: 50dvh;
-      border-left: none;
-      border-top: 1px solid var(--border);
-      border-radius: 16px 16px 0 0;
-      z-index: 900;
-    }
-
-    .app-body { flex-direction: column; }
-    #map { flex: 1; min-height: 50dvh; }
-  }
-
+  .badge { background: var(--accent); color: white; border-radius: 10px; padding: 1px 7px; font-size: 0.72rem; font-weight: 700; }
   .loading { text-align: center; padding: 30px; color: var(--ink-soft); font-size: 0.85rem; }
 
-  /* priorità badge */
-  .priority-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 0.72rem;
-    font-weight: 700;
-    padding: 3px 8px;
-    border-radius: 20px;
-    background: var(--accent-soft);
-    color: var(--accent);
-    border: 1px solid var(--accent-border);
+  .leaflet-popup-content-wrapper { border-radius: 10px !important; box-shadow: var(--shadow-lg) !important; font-family: var(--font-body) !important; border: 1px solid var(--border) !important; }
+  .popup-inner { padding: 4px 2px; min-width: 160px; }
+  .popup-cat { font-size: 0.72rem; font-weight: 600; margin-bottom: 4px; }
+  .popup-title { font-family: var(--font-display); font-size: 0.95rem; margin-bottom: 6px; }
+  .popup-votes { font-size: 0.76rem; color: #888; margin-bottom: 6px; }
+  .popup-open { font-size: 0.78rem; color: var(--accent); font-weight: 600; cursor: pointer; background: none; border: none; padding: 0; font-family: var(--font-body); }
+
+  @media (max-width: 640px) {
+    .sidebar { position: fixed; bottom: 0; left: 0; right: 0; width: 100%; height: 52dvh; border-left: none; border-top: 1px solid var(--border); border-radius: 16px 16px 0 0; z-index: 900; }
+    .app-body { flex-direction: column; }
+    #map { flex: 1; min-height: 48dvh; }
   }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">
-    <span class="logo-dot"></span>
-    HeyComune!
-  </div>
+  <div class="logo"><span class="logo-dot"></span>CittàAttiva</div>
   <div class="header-actions">
     <button class="btn btn-ghost btn-sm" onclick="toggleView('lista')">📋 Lista</button>
     <button class="btn btn-primary btn-sm" onclick="startNuovaSegnalazione()">+ Segnala</button>
@@ -597,6 +275,20 @@
       <button class="tab" id="tab-nuova" onclick="startNuovaSegnalazione()">+ Nuova</button>
     </div>
 
+    <div class="filter-bar" id="filterBar" style="display:none">
+      <button class="filter-chip active" data-cat="tutti" onclick="setFilter('tutti')">Tutte</button>
+      <button class="filter-chip" data-cat="buche" onclick="setFilter('buche')">🕳️ Buche</button>
+      <button class="filter-chip" data-cat="illuminazione" onclick="setFilter('illuminazione')">💡 Illuminazione</button>
+      <button class="filter-chip" data-cat="rifiuti" onclick="setFilter('rifiuti')">🗑️ Rifiuti</button>
+      <button class="filter-chip" data-cat="verde" onclick="setFilter('verde')">🌿 Verde</button>
+      <button class="filter-chip" data-cat="segnaletica" onclick="setFilter('segnaletica')">🚦 Segnaletica</button>
+      <button class="filter-chip" data-cat="accessibilita" onclick="setFilter('accessibilita')">♿ Accessibilità</button>
+      <button class="filter-chip" data-cat="acqua" onclick="setFilter('acqua')">🚿 Acqua</button>
+      <button class="filter-chip" data-cat="cantieri" onclick="setFilter('cantieri')">🚧 Cantieri</button>
+      <button class="filter-chip" data-cat="viabilita" onclick="setFilter('viabilita')">🚗 Viabilità</button>
+      <button class="filter-chip" data-cat="altro" onclick="setFilter('altro')">📌 Altro</button>
+    </div>
+
     <!-- LISTA -->
     <div class="sidebar-content" id="panelLista">
       <div class="loading" id="loadingState">Caricamento...</div>
@@ -610,10 +302,14 @@
         <div id="detailCat"></div>
         <div class="detail-title" id="detailTitle"></div>
         <div class="detail-stats">
-          <div class="stat-pill" id="detailVoti">👍 0 voti</div>
-          <div class="stat-pill" id="detailComm">💬 0 commenti</div>
+          <div class="stat-pill" id="detailLike">👍 0</div>
+          <div class="stat-pill" id="detailDislike">👎 0</div>
+          <div class="stat-pill" id="detailComm">💬 0</div>
         </div>
-        <button class="vote-btn" id="voteBtn" onclick="toggleVoto()">👍 Vota</button>
+        <div class="vote-row">
+          <button class="vote-btn like" id="voteBtn" onclick="toggleVoto('like')">👍 Vota</button>
+          <button class="vote-btn dislike" id="dislikeBtn" onclick="toggleVoto('dislike')">👎 Non urgente</button>
+        </div>
       </div>
       <div class="detail-body" id="detailBody"></div>
       <div class="comment-form">
@@ -638,7 +334,11 @@
           <option value="rifiuti">🗑️ Rifiuti e pulizia</option>
           <option value="verde">🌿 Verde pubblico</option>
           <option value="segnaletica">🚦 Segnaletica</option>
-          <option value="altro">📍 Altro</option>
+          <option value="accessibilita">♿ Accessibilità e barriere</option>
+          <option value="acqua">🚿 Acqua e fognature</option>
+          <option value="cantieri">🚧 Cantieri e lavori</option>
+          <option value="viabilita">🚗 Viabilità e parcheggio</option>
+          <option value="altro">📌 Altro</option>
         </select>
       </div>
 
@@ -678,34 +378,45 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// ─── CONFIG ──────────────────────────────────────────────────────────────────
 const SUPABASE_URL = 'https://cbhzrbhwjsiagojttmyc.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNiaHpyYmh3anNpYWdvanR0bXljIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1MzMwNDAsImV4cCI6MjA5MDEwOTA0MH0.OpsBDuofDlf-1BFRZLA8Zg2iAWWeMv9e2LR-kc1-p0U';
 
 const { createClient } = supabase;
 const db = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// ─── UTENTE ANONIMO ───────────────────────────────────────────────────────────
 function getUtenteId() {
   let id = localStorage.getItem('cittaattiva_uid');
-  if (!id) {
-    id = crypto.randomUUID();
-    localStorage.setItem('cittaattiva_uid', id);
-  }
+  if (!id) { id = crypto.randomUUID(); localStorage.setItem('cittaattiva_uid', id); }
   return id;
 }
 const ME = getUtenteId();
 
-// ─── STATO ───────────────────────────────────────────────────────────────────
 let segnalazioni = [];
 let segnalazioneAttiva = null;
 let markers = {};
 let nuovaPosizione = null;
 let pickingMode = false;
+let filtroAttivo = 'tutti';
+
+const CATEGORIE = {
+  buche:         { label: '🕳️ Buche',         emoji: '🕳️' },
+  illuminazione: { label: '💡 Illuminazione',  emoji: '💡' },
+  rifiuti:       { label: '🗑️ Rifiuti',        emoji: '🗑️' },
+  verde:         { label: '🌿 Verde',           emoji: '🌿' },
+  segnaletica:   { label: '🚦 Segnaletica',     emoji: '🚦' },
+  accessibilita: { label: '♿ Accessibilità',   emoji: '♿' },
+  acqua:         { label: '🚿 Acqua',           emoji: '🚿' },
+  cantieri:      { label: '🚧 Cantieri',        emoji: '🚧' },
+  viabilita:     { label: '🚗 Viabilità',       emoji: '🚗' },
+  altro:         { label: '📌 Altro',           emoji: '📌' },
+};
+
+function catLabel(cat) { return (CATEGORIE[cat] || CATEGORIE.altro).label; }
+function catEmoji(cat) { return (CATEGORIE[cat] || CATEGORIE.altro).emoji; }
+function catClass(cat) { return `cat-${cat}`; }
 
 // ─── MAPPA ───────────────────────────────────────────────────────────────────
-const map = L.map('map').setView([39.21633353002399, 9.116231623052148], 13);
-
+const map = L.map('map').setView([41.9028, 12.4964], 13);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
   maxZoom: 19
@@ -719,37 +430,23 @@ map.on('click', (e) => {
   stopPickMode();
 });
 
-function catIcon(cat) {
-  const emoji = { buche: '🕳️', illuminazione: '💡', rifiuti: '🗑️', verde: '🌿', segnaletica: '🚦', altro: '📍' };
-  return L.divIcon({
-    html: `<div style="font-size:20px;line-height:1;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3))">${emoji[cat] || '📌'}</div>`,
-    className: '',
-    iconSize: [28, 28],
-    iconAnchor: [14, 28],
-    popupAnchor: [0, -28]
-  });
-}
-
 function aggiungiMarker(s) {
   if (markers[s.id]) map.removeLayer(markers[s.id]);
-  const m = L.marker([s.lat, s.lng], { icon: catIcon(s.categoria) }).addTo(map);
+  const icon = L.divIcon({
+    html: `<div style="font-size:22px;line-height:1;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.35))">${catEmoji(s.categoria)}</div>`,
+    className: '', iconSize: [28,28], iconAnchor: [14,28], popupAnchor: [0,-28]
+  });
+  const m = L.marker([s.lat, s.lng], { icon }).addTo(map);
   m.bindPopup(`
     <div class="popup-inner">
       <div class="popup-cat">${catLabel(s.categoria)}</div>
       <div class="popup-title">${s.titolo}</div>
+      <div class="popup-votes">👍 ${s._like||0} &nbsp; 👎 ${s._dislike||0}</div>
       <button class="popup-open" onclick="apriDettaglio('${s.id}')">Apri dettaglio →</button>
     </div>
   `);
   markers[s.id] = m;
 }
-
-// ─── CATEGORIE ───────────────────────────────────────────────────────────────
-function catLabel(cat) {
-  const map2 = { buche: '🕳️ Buche', illuminazione: '💡 Illuminazione', rifiuti: '🗑️ Rifiuti', verde: '🌿 Verde', segnaletica: '🚦 Segnaletica', altro: '📍 Altro' };
-  return map2[cat] || cat;
-}
-
-function catClass(cat) { return `cat-${cat}`; }
 
 // ─── CARICA DATI ─────────────────────────────────────────────────────────────
 async function caricaSegnalazioni() {
@@ -757,49 +454,69 @@ async function caricaSegnalazioni() {
   if (error) { console.error(error); return; }
   segnalazioni = data || [];
 
-  // Carica conteggi voti
-  const { data: votiData } = await db.from('voti').select('segnalazione_id');
-  const votiCount = {};
-  (votiData || []).forEach(v => { votiCount[v.segnalazione_id] = (votiCount[v.segnalazione_id] || 0) + 1; });
-  segnalazioni.forEach(s => s._voti = votiCount[s.id] || 0);
+  const { data: votiData } = await db.from('voti').select('segnalazione_id, tipo');
+  const likeCount = {}, dislikeCount = {};
+  (votiData||[]).forEach(v => {
+    if (v.tipo === 'like') likeCount[v.segnalazione_id] = (likeCount[v.segnalazione_id]||0)+1;
+    else dislikeCount[v.segnalazione_id] = (dislikeCount[v.segnalazione_id]||0)+1;
+  });
+  segnalazioni.forEach(s => { s._like = likeCount[s.id]||0; s._dislike = dislikeCount[s.id]||0; });
 
-  // Carica voti dell'utente
-  const { data: mieVotiData } = await db.from('voti').select('segnalazione_id').eq('autore_id', ME);
-  const mieVoti = new Set((mieVotiData || []).map(v => v.segnalazione_id));
-  segnalazioni.forEach(s => s._mioVoto = mieVoti.has(s.id));
+  const { data: mieVotiData } = await db.from('voti').select('segnalazione_id, tipo').eq('autore_id', ME);
+  const mioLike = new Set(), mioDislike = new Set();
+  (mieVotiData||[]).forEach(v => { if (v.tipo==='like') mioLike.add(v.segnalazione_id); else mioDislike.add(v.segnalazione_id); });
+  segnalazioni.forEach(s => { s._mioLike = mioLike.has(s.id); s._mioDislike = mioDislike.has(s.id); });
 
-  // Ordina per voti
-  segnalazioni.sort((a, b) => b._voti - a._voti);
+  segnalazioni.sort((a,b) => b._like - a._like);
 
   document.getElementById('loadingState').style.display = 'none';
   document.getElementById('countBadge').textContent = segnalazioni.length;
-
+  document.getElementById('filterBar').style.display = 'flex';
   renderLista();
   segnalazioni.forEach(aggiungiMarker);
 }
 
+// ─── FILTRO ──────────────────────────────────────────────────────────────────
+function setFilter(cat) {
+  filtroAttivo = cat;
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.toggle('active', c.dataset.cat === cat));
+  renderLista();
+  segnalazioni.forEach(s => {
+    if (!markers[s.id]) return;
+    const show = cat === 'tutti' || s.categoria === cat;
+    if (show) { if (!map.hasLayer(markers[s.id])) markers[s.id].addTo(map); }
+    else { if (map.hasLayer(markers[s.id])) map.removeLayer(markers[s.id]); }
+  });
+}
+
 // ─── RENDER LISTA ────────────────────────────────────────────────────────────
 function renderLista() {
+  const filtrate = filtroAttivo === 'tutti' ? segnalazioni : segnalazioni.filter(s => s.categoria === filtroAttivo);
   const el = document.getElementById('listaSegnalazioni');
-  if (!segnalazioni.length) {
-    el.innerHTML = `<div class="empty"><div class="empty-icon">📍</div><div class="empty-title">Nessuna segnalazione</div><div class="empty-desc">Sii il primo a segnalare un problema nella tua città</div></div>`;
+
+  if (!filtrate.length) {
+    el.innerHTML = `<div class="empty"><div class="empty-icon">📍</div><div class="empty-title">Nessuna segnalazione</div><div class="empty-desc">Nessuna segnalazione in questa categoria</div></div>`;
     return;
   }
-  el.innerHTML = segnalazioni.map(s => `
-    <div class="card" onclick="apriDettaglio('${s.id}')">
-      ${s.foto_url ? `<img class="card-img" src="${s.foto_url}" alt="">` : ''}
-      <span class="card-cat ${catClass(s.categoria)}">${catLabel(s.categoria)}</span>
-      <div class="card-title">${s.titolo}</div>
-      ${s.descrizione ? `<div class="card-desc">${s.descrizione}</div>` : ''}
-      <div class="card-meta">
-        <button class="vote-btn ${s._mioVoto ? 'voted' : ''}" onclick="event.stopPropagation(); toggleVotoCard('${s.id}')">
-          👍 ${s._voti}
-        </button>
-        <span>💬</span>
-        <span>${timeAgo(s.created_at)}</span>
-      </div>
-    </div>
-  `).join('');
+
+  el.innerHTML = filtrate.map(s => {
+    const tot = s._like + s._dislike;
+    const pct = tot > 0 ? Math.round((s._like/tot)*100) : 50;
+    const neg = s._like < s._dislike;
+    return `
+      <div class="card" onclick="apriDettaglio('${s.id}')">
+        ${s.foto_url ? `<img class="card-img" src="${s.foto_url}" alt="">` : ''}
+        <span class="card-cat ${catClass(s.categoria)}">${catLabel(s.categoria)}</span>
+        <div class="card-title">${s.titolo}</div>
+        ${s.descrizione ? `<div class="card-desc">${s.descrizione}</div>` : ''}
+        ${tot > 0 ? `<div class="score-bar"><div class="score-fill ${neg?'negative':''}" style="width:${pct}%"></div></div>` : ''}
+        <div class="card-meta">
+          <button class="vote-btn like ${s._mioLike?'voted':''}" onclick="event.stopPropagation();toggleVotoCard('${s.id}','like')">👍 ${s._like}</button>
+          <button class="vote-btn dislike ${s._mioDislike?'voted':''}" onclick="event.stopPropagation();toggleVotoCard('${s.id}','dislike')">👎 ${s._dislike}</button>
+          <span style="margin-left:auto">${timeAgo(s.created_at)}</span>
+        </div>
+      </div>`;
+  }).join('');
 }
 
 // ─── DETTAGLIO ───────────────────────────────────────────────────────────────
@@ -807,74 +524,73 @@ async function apriDettaglio(id) {
   segnalazioneAttiva = segnalazioni.find(s => s.id === id);
   if (!segnalazioneAttiva) return;
 
-  // Centra mappa
   map.setView([segnalazioneAttiva.lat, segnalazioneAttiva.lng], 16);
   if (markers[id]) markers[id].openPopup();
 
-  // Carica commenti
-  const { data: commenti } = await db.from('commenti')
-    .select('*')
-    .eq('segnalazione_id', id)
-    .order('created_at', { ascending: true });
+  const { data: commenti } = await db.from('commenti').select('*').eq('segnalazione_id', id).order('created_at', { ascending: true });
+  const { data: votiData } = await db.from('voti').select('autore_id, tipo').eq('segnalazione_id', id);
 
-  // Ricarica voti
-  const { data: votiData } = await db.from('voti').select('autore_id').eq('segnalazione_id', id);
-  segnalazioneAttiva._voti = votiData ? votiData.length : 0;
-  segnalazioneAttiva._mioVoto = votiData ? votiData.some(v => v.autore_id === ME) : false;
+  segnalazioneAttiva._like = (votiData||[]).filter(v=>v.tipo==='like').length;
+  segnalazioneAttiva._dislike = (votiData||[]).filter(v=>v.tipo==='dislike').length;
+  segnalazioneAttiva._mioLike = (votiData||[]).some(v=>v.autore_id===ME && v.tipo==='like');
+  segnalazioneAttiva._mioDislike = (votiData||[]).some(v=>v.autore_id===ME && v.tipo==='dislike');
 
-  // Render
-  document.getElementById('detailCat').innerHTML = `<span class="card-cat ${catClass(segnalazioneAttiva.categoria)}" style="margin-bottom:8px">${catLabel(segnalazioneAttiva.categoria)}</span>`;
+  document.getElementById('detailCat').innerHTML =
+    `<span class="card-cat ${catClass(segnalazioneAttiva.categoria)}" style="margin-bottom:8px">${catLabel(segnalazioneAttiva.categoria)}</span>`;
   document.getElementById('detailTitle').textContent = segnalazioneAttiva.titolo;
-  document.getElementById('detailVoti').textContent = `👍 ${segnalazioneAttiva._voti} voti`;
-  document.getElementById('detailComm').textContent = `💬 ${(commenti||[]).length} commenti`;
+  document.getElementById('detailLike').textContent = `👍 ${segnalazioneAttiva._like}`;
+  document.getElementById('detailDislike').textContent = `👎 ${segnalazioneAttiva._dislike}`;
+  document.getElementById('detailComm').textContent = `💬 ${(commenti||[]).length}`;
+  document.getElementById('voteBtn').classList.toggle('voted', segnalazioneAttiva._mioLike);
+  document.getElementById('dislikeBtn').classList.toggle('voted', segnalazioneAttiva._mioDislike);
 
-  const voteBtn = document.getElementById('voteBtn');
-  voteBtn.textContent = segnalazioneAttiva._mioVoto ? '👍 Votato' : '👍 Vota';
-  voteBtn.classList.toggle('voted', segnalazioneAttiva._mioVoto);
+  const tot = segnalazioneAttiva._like + segnalazioneAttiva._dislike;
+  const pct = tot > 0 ? Math.round((segnalazioneAttiva._like/tot)*100) : 50;
+  const neg = segnalazioneAttiva._like < segnalazioneAttiva._dislike;
 
-  let bodyHtml = '';
-  if (segnalazioneAttiva.foto_url) bodyHtml += `<img class="detail-img" src="${segnalazioneAttiva.foto_url}">`;
-  if (segnalazioneAttiva.descrizione) bodyHtml += `<p class="detail-desc">${segnalazioneAttiva.descrizione}</p>`;
-  bodyHtml += `<div style="font-size:0.78rem;color:var(--ink-soft);margin-bottom:16px">📍 ${segnalazioneAttiva.lat.toFixed(5)}, ${segnalazioneAttiva.lng.toFixed(5)} · ${timeAgo(segnalazioneAttiva.created_at)}</div>`;
-
-  bodyHtml += `<div class="comments-title">Commenti</div>`;
-  if (!commenti || !commenti.length) {
-    bodyHtml += `<div style="font-size:0.82rem;color:var(--ink-soft)">Nessun commento ancora. Sii il primo!</div>`;
+  let body = '';
+  if (segnalazioneAttiva.foto_url) body += `<img class="detail-img" src="${segnalazioneAttiva.foto_url}">`;
+  if (segnalazioneAttiva.descrizione) body += `<p class="detail-desc">${segnalazioneAttiva.descrizione}</p>`;
+  if (tot > 0) body += `
+    <div style="margin-bottom:14px">
+      <div style="font-size:0.78rem;color:var(--ink-soft);margin-bottom:4px">Consenso: ${pct}% favorevoli (${tot} voti totali)</div>
+      <div class="score-bar" style="height:6px"><div class="score-fill ${neg?'negative':''}" style="width:${pct}%"></div></div>
+    </div>`;
+  body += `<div style="font-size:0.78rem;color:var(--ink-soft);margin-bottom:16px">📍 ${segnalazioneAttiva.lat.toFixed(5)}, ${segnalazioneAttiva.lng.toFixed(5)} · ${timeAgo(segnalazioneAttiva.created_at)}</div>`;
+  body += `<div class="comments-title">Commenti (${(commenti||[]).length})</div>`;
+  if (!commenti||!commenti.length) {
+    body += `<div style="font-size:0.82rem;color:var(--ink-soft)">Nessun commento ancora.</div>`;
   } else {
-    bodyHtml += commenti.map(c => `
-      <div class="comment">
-        <div class="comment-meta">Cittadino · ${timeAgo(c.created_at)}</div>
-        ${c.testo}
-      </div>
-    `).join('');
+    body += commenti.map(c => `<div class="comment"><div class="comment-meta">Cittadino · ${timeAgo(c.created_at)}</div>${c.testo}</div>`).join('');
   }
 
-  document.getElementById('detailBody').innerHTML = bodyHtml;
-
+  document.getElementById('detailBody').innerHTML = body;
   showPanel('dettaglio');
 }
 
-// ─── VOTO ────────────────────────────────────────────────────────────────────
-async function toggleVoto() {
+// ─── VOTI ────────────────────────────────────────────────────────────────────
+async function toggleVoto(tipo) {
   if (!segnalazioneAttiva) return;
-  await toggleVotoCard(segnalazioneAttiva.id);
+  await toggleVotoCard(segnalazioneAttiva.id, tipo);
   apriDettaglio(segnalazioneAttiva.id);
 }
 
-async function toggleVotoCard(id) {
+async function toggleVotoCard(id, tipo) {
   const s = segnalazioni.find(x => x.id === id);
   if (!s) return;
+  const haVotato = tipo === 'like' ? s._mioLike : s._mioDislike;
 
-  if (s._mioVoto) {
-    await db.from('voti').delete().eq('segnalazione_id', id).eq('autore_id', ME);
-    s._voti--;
-    s._mioVoto = false;
+  if (haVotato) {
+    await db.from('voti').delete().eq('segnalazione_id', id).eq('autore_id', ME).eq('tipo', tipo);
+    if (tipo==='like') { s._like = Math.max(0, s._like-1); s._mioLike = false; }
+    else { s._dislike = Math.max(0, s._dislike-1); s._mioDislike = false; }
   } else {
-    const { error } = await db.from('voti').insert({ segnalazione_id: id, autore_id: ME });
-    if (!error) { s._voti++; s._mioVoto = true; }
-    else { showToast('Hai già votato questa segnalazione'); return; }
+    const { error } = await db.from('voti').insert({ segnalazione_id: id, autore_id: ME, tipo });
+    if (error) { showToast('Hai già espresso questo voto'); return; }
+    if (tipo==='like') { s._like++; s._mioLike = true; }
+    else { s._dislike++; s._mioDislike = true; }
   }
-
+  aggiungiMarker(s);
   renderLista();
 }
 
@@ -882,15 +598,8 @@ async function toggleVotoCard(id) {
 async function inviaCommento() {
   const testo = document.getElementById('commentInput').value.trim();
   if (!testo || !segnalazioneAttiva) return;
-
-  const { error } = await db.from('commenti').insert({
-    segnalazione_id: segnalazioneAttiva.id,
-    autore_id: ME,
-    testo
-  });
-
+  const { error } = await db.from('commenti').insert({ segnalazione_id: segnalazioneAttiva.id, autore_id: ME, testo });
   if (error) { showToast('Errore nell\'invio del commento'); return; }
-
   document.getElementById('commentInput').value = '';
   showToast('Commento inviato!');
   apriDettaglio(segnalazioneAttiva.id);
@@ -911,8 +620,7 @@ function usaPosizioneAttuale() {
   if (!navigator.geolocation) { showToast('GPS non disponibile'); return; }
   navigator.geolocation.getCurrentPosition(pos => {
     nuovaPosizione = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-    document.getElementById('locationDisplay').textContent =
-      `${nuovaPosizione.lat.toFixed(5)}, ${nuovaPosizione.lng.toFixed(5)}`;
+    document.getElementById('locationDisplay').textContent = `${nuovaPosizione.lat.toFixed(5)}, ${nuovaPosizione.lng.toFixed(5)}`;
     map.setView([nuovaPosizione.lat, nuovaPosizione.lng], 17);
     showToast('Posizione GPS acquisita!');
   }, () => showToast('Impossibile ottenere la posizione'));
@@ -934,11 +642,7 @@ function previewFoto(e) {
   const file = e.target.files[0];
   if (!file) return;
   const reader = new FileReader();
-  reader.onload = ev => {
-    const img = document.getElementById('fotoPreview');
-    img.src = ev.target.result;
-    img.style.display = 'block';
-  };
+  reader.onload = ev => { const img = document.getElementById('fotoPreview'); img.src = ev.target.result; img.style.display = 'block'; };
   reader.readAsDataURL(file);
 }
 
@@ -946,37 +650,26 @@ async function inviaForm() {
   const titolo = document.getElementById('fTitolo').value.trim();
   const categoria = document.getElementById('fCategoria').value;
   const descrizione = document.getElementById('fDescrizione').value.trim();
-
   if (!titolo) { showToast('Inserisci un titolo'); return; }
   if (!nuovaPosizione) { showToast('Seleziona una posizione'); return; }
 
   let foto_url = null;
   const fotoFile = document.getElementById('fFoto').files[0];
-
   if (fotoFile) {
     const ext = fotoFile.name.split('.').pop();
     const filename = `${crypto.randomUUID()}.${ext}`;
-    const { data: uploadData, error: upErr } = await db.storage.from('foto').upload(filename, fotoFile);
-    if (!upErr) {
-      const { data: urlData } = db.storage.from('foto').getPublicUrl(filename);
-      foto_url = urlData.publicUrl;
-    }
+    const { error: upErr } = await db.storage.from('foto').upload(filename, fotoFile);
+    if (!upErr) { const { data: u } = db.storage.from('foto').getPublicUrl(filename); foto_url = u.publicUrl; }
   }
 
   const { data, error } = await db.from('segnalazioni').insert({
-    titolo,
-    descrizione: descrizione || null,
-    categoria,
-    lat: nuovaPosizione.lat,
-    lng: nuovaPosizione.lng,
-    foto_url,
-    autore_id: ME
+    titolo, descrizione: descrizione||null, categoria,
+    lat: nuovaPosizione.lat, lng: nuovaPosizione.lng, foto_url, autore_id: ME
   }).select().single();
 
   if (error) { showToast('Errore nell\'invio'); console.error(error); return; }
 
-  data._voti = 0;
-  data._mioVoto = false;
+  data._like=0; data._dislike=0; data._mioLike=false; data._mioDislike=false;
   segnalazioni.unshift(data);
   aggiungiMarker(data);
   document.getElementById('countBadge').textContent = segnalazioni.length;
@@ -986,17 +679,18 @@ async function inviaForm() {
   map.setView([data.lat, data.lng], 16);
 }
 
-// ─── NAVIGAZIONE PANNELLI ────────────────────────────────────────────────────
+// ─── NAVIGAZIONE ─────────────────────────────────────────────────────────────
 function showPanel(name) {
   document.getElementById('panelLista').style.display = 'none';
+  document.getElementById('filterBar').style.display = 'none';
   document.getElementById('panelDettaglio').classList.remove('active');
   document.getElementById('panelNuova').classList.remove('active');
-
   document.getElementById('tab-lista').classList.remove('active');
   document.getElementById('tab-nuova').classList.remove('active');
 
   if (name === 'lista') {
     document.getElementById('panelLista').style.display = 'block';
+    document.getElementById('filterBar').style.display = 'flex';
     document.getElementById('tab-lista').classList.add('active');
   } else if (name === 'dettaglio') {
     document.getElementById('panelDettaglio').classList.add('active');
@@ -1007,13 +701,11 @@ function showPanel(name) {
   }
 }
 
-function toggleView(name) { showPanel(name); }
+function toggleView(n) { showPanel(n); }
 function backToLista() { segnalazioneAttiva = null; showPanel('lista'); renderLista(); }
 
-// ─── HELPERS ─────────────────────────────────────────────────────────────────
 function timeAgo(ts) {
-  const d = new Date(ts), now = new Date();
-  const diff = Math.floor((now - d) / 1000);
+  const diff = Math.floor((new Date() - new Date(ts)) / 1000);
   if (diff < 60) return 'adesso';
   if (diff < 3600) return `${Math.floor(diff/60)}m fa`;
   if (diff < 86400) return `${Math.floor(diff/3600)}h fa`;
@@ -1028,20 +720,18 @@ function showToast(msg) {
 }
 
 // ─── REALTIME ────────────────────────────────────────────────────────────────
-db.channel('segnalazioni')
+db.channel('segnalazioni_live')
   .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'segnalazioni' }, payload => {
     const s = payload.new;
-    s._voti = 0; s._mioVoto = false;
+    s._like=0; s._dislike=0; s._mioLike=false; s._mioDislike=false;
     if (!segnalazioni.find(x => x.id === s.id)) {
-      segnalazioni.push(s);
+      segnalazioni.unshift(s);
       aggiungiMarker(s);
       document.getElementById('countBadge').textContent = segnalazioni.length;
       renderLista();
     }
-  })
-  .subscribe();
+  }).subscribe();
 
-// ─── INIT ────────────────────────────────────────────────────────────────────
 caricaSegnalazioni();
 showPanel('lista');
 </script>
