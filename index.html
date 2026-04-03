@@ -3,7 +3,28 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CittàAttiva — Segnalazioni</title>
+<title>HeyComune — Segnalazioni cittadine</title>
+
+<!-- SEO -->
+<meta name="description" content="Segnala problemi nella tua città, vota le priorità e aiuta il comune a intervenire dove serve davvero.">
+<meta name="theme-color" content="#d4380d">
+
+<!-- Open Graph (Facebook, WhatsApp, Telegram) -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="HeyComune 📍 — Segnalazioni cittadine">
+<meta property="og:description" content="Segnala buche, problemi di illuminazione, rifiuti e altro. Vota le priorità e aiuta il comune a intervenire dove serve davvero.">
+<meta property="og:image" content="https://og-image-generator.vercel.app/api/og?title=HeyComune&subtitle=Segnalazioni+cittadine&emoji=%F0%9F%93%8D">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="it_IT">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="HeyComune 📍 — Segnalazioni cittadine">
+<meta name="twitter:description" content="Segnala problemi nella tua città, vota le priorità e aiuta il comune a intervenire dove serve davvero.">
+
+<!-- Favicon emoji -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📍</text></svg>">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -55,8 +76,17 @@
     z-index: 1000;
   }
 
-  .logo { font-family: var(--font-display); font-size: 1.25rem; color: var(--ink); display: flex; align-items: center; gap: 8px; }
-  .logo-dot { width: 10px; height: 10px; background: var(--accent); border-radius: 50%; display: inline-block; }
+  .logo {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+  }
+
+  .logo-icon { font-size: 1.1rem; }
   .header-actions { display: flex; gap: 8px; align-items: center; }
 
   .btn {
@@ -144,6 +174,15 @@
 
   .card-img { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; }
 
+  /* SHARE BUTTON */
+  .share-btn {
+    display: flex; align-items: center; gap: 4px;
+    background: none; border: none; cursor: pointer;
+    font-size: 0.78rem; color: var(--ink-soft); font-family: var(--font-body);
+    padding: 3px 6px; border-radius: 6px; transition: all 0.15s;
+  }
+  .share-btn:hover { color: var(--accent); background: var(--accent-soft); }
+
   .detail-panel { display: none; flex-direction: column; height: 100%; }
   .detail-panel.active { display: flex; }
 
@@ -164,7 +203,7 @@
     border-radius: 20px; padding: 5px 12px; font-size: 0.8rem; font-weight: 600;
   }
 
-  .vote-row { display: flex; gap: 8px; align-items: center; }
+  .vote-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
   .detail-body { flex: 1; overflow-y: auto; padding: 16px; }
   .detail-desc { font-size: 0.88rem; color: var(--ink-soft); line-height: 1.6; margin-bottom: 16px; }
   .detail-img { width: 100%; border-radius: 10px; margin-bottom: 16px; }
@@ -245,6 +284,19 @@
   .popup-votes { font-size: 0.76rem; color: #888; margin-bottom: 6px; }
   .popup-open { font-size: 0.78rem; color: var(--accent); font-weight: 600; cursor: pointer; background: none; border: none; padding: 0; font-family: var(--font-body); }
 
+  /* ONBOARDING BANNER */
+  .onboarding {
+    background: linear-gradient(135deg, var(--accent-soft) 0%, #fff8f0 100%);
+    border: 1px solid var(--accent-border);
+    border-radius: var(--radius);
+    padding: 14px;
+    margin-bottom: 14px;
+    position: relative;
+  }
+  .onboarding-title { font-family: var(--font-display); font-size: 1rem; margin-bottom:4px; }
+  .onboarding-desc { font-size: 0.82rem; color: var(--ink-soft); line-height: 1.5; }
+  .onboarding-close { position: absolute; top: 10px; right: 10px; background: none; border: none; cursor: pointer; font-size: 1rem; color: var(--ink-soft); }
+
   @media (max-width: 640px) {
     .sidebar { position: fixed; bottom: 0; left: 0; right: 0; width: 100%; height: 52dvh; border-left: none; border-top: 1px solid var(--border); border-radius: 16px 16px 0 0; z-index: 900; }
     .app-body { flex-direction: column; }
@@ -255,8 +307,12 @@
 <body>
 
 <header>
-  <div class="logo"><span class="logo-dot"></span>CittàAttiva</div>
+  <div class="logo">
+    <span class="logo-icon">📍</span>
+    HeyComune
+  </div>
   <div class="header-actions">
+    <button class="btn btn-ghost btn-sm" onclick="condividiSito()">↗ Condividi</button>
     <button class="btn btn-ghost btn-sm" onclick="toggleView('lista')">📋 Lista</button>
     <button class="btn btn-primary btn-sm" onclick="startNuovaSegnalazione()">+ Segnala</button>
   </div>
@@ -292,6 +348,13 @@
     <!-- LISTA -->
     <div class="sidebar-content" id="panelLista">
       <div class="loading" id="loadingState">Caricamento...</div>
+      <div id="onboardingBanner" style="display:none">
+        <div class="onboarding">
+          <button class="onboarding-close" onclick="chiudiOnboarding()">✕</button>
+          <div class="onboarding-title">📍 Benvenuto su HeyComune!</div>
+          <div class="onboarding-desc">Segnala problemi nella tua città, vota quelli che ti stanno a cuore e aiuta il comune a capire dove intervenire prima.</div>
+        </div>
+      </div>
       <div id="listaSegnalazioni"></div>
     </div>
 
@@ -309,6 +372,7 @@
         <div class="vote-row">
           <button class="vote-btn like" id="voteBtn" onclick="toggleVoto('like')">👍 Vota</button>
           <button class="vote-btn dislike" id="dislikeBtn" onclick="toggleVoto('dislike')">👎 Non urgente</button>
+          <button class="share-btn" id="shareDettaglioBtn" onclick="condividiSegnalazione()">↗ Condividi</button>
         </div>
       </div>
       <div class="detail-body" id="detailBody"></div>
@@ -385,8 +449,8 @@ const { createClient } = supabase;
 const db = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 function getUtenteId() {
-  let id = localStorage.getItem('cittaattiva_uid');
-  if (!id) { id = crypto.randomUUID(); localStorage.setItem('cittaattiva_uid', id); }
+  let id = localStorage.getItem('heycomune_uid');
+  if (!id) { id = crypto.randomUUID(); localStorage.setItem('heycomune_uid', id); }
   return id;
 }
 const ME = getUtenteId();
@@ -414,6 +478,46 @@ const CATEGORIE = {
 function catLabel(cat) { return (CATEGORIE[cat] || CATEGORIE.altro).label; }
 function catEmoji(cat) { return (CATEGORIE[cat] || CATEGORIE.altro).emoji; }
 function catClass(cat) { return `cat-${cat}`; }
+
+// ─── ONBOARDING ──────────────────────────────────────────────────────────────
+function initOnboarding() {
+  const visto = localStorage.getItem('heycomune_onboarding');
+  if (!visto) document.getElementById('onboardingBanner').style.display = 'block';
+}
+
+function chiudiOnboarding() {
+  document.getElementById('onboardingBanner').style.display = 'none';
+  localStorage.setItem('heycomune_onboarding', '1');
+}
+
+// ─── CONDIVISIONE ────────────────────────────────────────────────────────────
+function condividiSito() {
+  const url = window.location.href.split('?')[0];
+  const testo = '📍 HeyComune — Segnala problemi nella tua città, vota le priorità e aiuta il comune a intervenire dove serve davvero.';
+  if (navigator.share) {
+    navigator.share({ title: 'HeyComune', text: testo, url });
+  } else {
+    navigator.clipboard.writeText(url).then(() => showToast('Link copiato! Condividilo sui social 📋'));
+  }
+}
+
+function condividiSegnalazione() {
+  if (!segnalazioneAttiva) return;
+  const url = `${window.location.href.split('?')[0]}?s=${segnalazioneAttiva.id}`;
+  const testo = `📍 "${segnalazioneAttiva.titolo}" — ${catLabel(segnalazioneAttiva.categoria)} segnalata su HeyComune. Vota anche tu!`;
+  if (navigator.share) {
+    navigator.share({ title: segnalazioneAttiva.titolo, text: testo, url });
+  } else {
+    navigator.clipboard.writeText(`${testo}\n${url}`).then(() => showToast('Link copiato! Incollalo su Facebook 📋'));
+  }
+}
+
+// Deep link: apri direttamente una segnalazione se c'è ?s=id nell'URL
+function checkDeepLink() {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('s');
+  if (id) setTimeout(() => apriDettaglio(id), 800);
+}
 
 // ─── MAPPA ───────────────────────────────────────────────────────────────────
 const map = L.map('map').setView([41.9028, 12.4964], 13);
@@ -457,33 +561,36 @@ async function caricaSegnalazioni() {
   const { data: votiData } = await db.from('voti').select('segnalazione_id, tipo');
   const likeCount = {}, dislikeCount = {};
   (votiData||[]).forEach(v => {
-    if (v.tipo === 'like') likeCount[v.segnalazione_id] = (likeCount[v.segnalazione_id]||0)+1;
-    else dislikeCount[v.segnalazione_id] = (dislikeCount[v.segnalazione_id]||0)+1;
+    if (v.tipo==='like') likeCount[v.segnalazione_id]=(likeCount[v.segnalazione_id]||0)+1;
+    else dislikeCount[v.segnalazione_id]=(dislikeCount[v.segnalazione_id]||0)+1;
   });
-  segnalazioni.forEach(s => { s._like = likeCount[s.id]||0; s._dislike = dislikeCount[s.id]||0; });
+  segnalazioni.forEach(s => { s._like=likeCount[s.id]||0; s._dislike=dislikeCount[s.id]||0; });
 
   const { data: mieVotiData } = await db.from('voti').select('segnalazione_id, tipo').eq('autore_id', ME);
   const mioLike = new Set(), mioDislike = new Set();
-  (mieVotiData||[]).forEach(v => { if (v.tipo==='like') mioLike.add(v.segnalazione_id); else mioDislike.add(v.segnalazione_id); });
-  segnalazioni.forEach(s => { s._mioLike = mioLike.has(s.id); s._mioDislike = mioDislike.has(s.id); });
+  (mieVotiData||[]).forEach(v => { if(v.tipo==='like') mioLike.add(v.segnalazione_id); else mioDislike.add(v.segnalazione_id); });
+  segnalazioni.forEach(s => { s._mioLike=mioLike.has(s.id); s._mioDislike=mioDislike.has(s.id); });
 
   segnalazioni.sort((a,b) => b._like - a._like);
 
   document.getElementById('loadingState').style.display = 'none';
   document.getElementById('countBadge').textContent = segnalazioni.length;
   document.getElementById('filterBar').style.display = 'flex';
+
+  initOnboarding();
   renderLista();
   segnalazioni.forEach(aggiungiMarker);
+  checkDeepLink();
 }
 
 // ─── FILTRO ──────────────────────────────────────────────────────────────────
 function setFilter(cat) {
   filtroAttivo = cat;
-  document.querySelectorAll('.filter-chip').forEach(c => c.classList.toggle('active', c.dataset.cat === cat));
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.toggle('active', c.dataset.cat===cat));
   renderLista();
   segnalazioni.forEach(s => {
     if (!markers[s.id]) return;
-    const show = cat === 'tutti' || s.categoria === cat;
+    const show = cat==='tutti' || s.categoria===cat;
     if (show) { if (!map.hasLayer(markers[s.id])) markers[s.id].addTo(map); }
     else { if (map.hasLayer(markers[s.id])) map.removeLayer(markers[s.id]); }
   });
@@ -491,17 +598,17 @@ function setFilter(cat) {
 
 // ─── RENDER LISTA ────────────────────────────────────────────────────────────
 function renderLista() {
-  const filtrate = filtroAttivo === 'tutti' ? segnalazioni : segnalazioni.filter(s => s.categoria === filtroAttivo);
+  const filtrate = filtroAttivo==='tutti' ? segnalazioni : segnalazioni.filter(s=>s.categoria===filtroAttivo);
   const el = document.getElementById('listaSegnalazioni');
 
   if (!filtrate.length) {
-    el.innerHTML = `<div class="empty"><div class="empty-icon">📍</div><div class="empty-title">Nessuna segnalazione</div><div class="empty-desc">Nessuna segnalazione in questa categoria</div></div>`;
+    el.innerHTML = `<div class="empty"><div class="empty-icon">📍</div><div class="empty-title">Nessuna segnalazione</div><div class="empty-desc">Sii il primo a segnalare un problema nella tua città</div></div>`;
     return;
   }
 
   el.innerHTML = filtrate.map(s => {
-    const tot = s._like + s._dislike;
-    const pct = tot > 0 ? Math.round((s._like/tot)*100) : 50;
+    const tot = s._like+s._dislike;
+    const pct = tot>0 ? Math.round((s._like/tot)*100) : 50;
     const neg = s._like < s._dislike;
     return `
       <div class="card" onclick="apriDettaglio('${s.id}')">
@@ -509,7 +616,7 @@ function renderLista() {
         <span class="card-cat ${catClass(s.categoria)}">${catLabel(s.categoria)}</span>
         <div class="card-title">${s.titolo}</div>
         ${s.descrizione ? `<div class="card-desc">${s.descrizione}</div>` : ''}
-        ${tot > 0 ? `<div class="score-bar"><div class="score-fill ${neg?'negative':''}" style="width:${pct}%"></div></div>` : ''}
+        ${tot>0 ? `<div class="score-bar"><div class="score-fill ${neg?'negative':''}" style="width:${pct}%"></div></div>` : ''}
         <div class="card-meta">
           <button class="vote-btn like ${s._mioLike?'voted':''}" onclick="event.stopPropagation();toggleVotoCard('${s.id}','like')">👍 ${s._like}</button>
           <button class="vote-btn dislike ${s._mioDislike?'voted':''}" onclick="event.stopPropagation();toggleVotoCard('${s.id}','dislike')">👎 ${s._dislike}</button>
@@ -521,7 +628,7 @@ function renderLista() {
 
 // ─── DETTAGLIO ───────────────────────────────────────────────────────────────
 async function apriDettaglio(id) {
-  segnalazioneAttiva = segnalazioni.find(s => s.id === id);
+  segnalazioneAttiva = segnalazioni.find(s=>s.id===id);
   if (!segnalazioneAttiva) return;
 
   map.setView([segnalazioneAttiva.lat, segnalazioneAttiva.lng], 16);
@@ -532,8 +639,8 @@ async function apriDettaglio(id) {
 
   segnalazioneAttiva._like = (votiData||[]).filter(v=>v.tipo==='like').length;
   segnalazioneAttiva._dislike = (votiData||[]).filter(v=>v.tipo==='dislike').length;
-  segnalazioneAttiva._mioLike = (votiData||[]).some(v=>v.autore_id===ME && v.tipo==='like');
-  segnalazioneAttiva._mioDislike = (votiData||[]).some(v=>v.autore_id===ME && v.tipo==='dislike');
+  segnalazioneAttiva._mioLike = (votiData||[]).some(v=>v.autore_id===ME&&v.tipo==='like');
+  segnalazioneAttiva._mioDislike = (votiData||[]).some(v=>v.autore_id===ME&&v.tipo==='dislike');
 
   document.getElementById('detailCat').innerHTML =
     `<span class="card-cat ${catClass(segnalazioneAttiva.categoria)}" style="margin-bottom:8px">${catLabel(segnalazioneAttiva.categoria)}</span>`;
@@ -544,14 +651,14 @@ async function apriDettaglio(id) {
   document.getElementById('voteBtn').classList.toggle('voted', segnalazioneAttiva._mioLike);
   document.getElementById('dislikeBtn').classList.toggle('voted', segnalazioneAttiva._mioDislike);
 
-  const tot = segnalazioneAttiva._like + segnalazioneAttiva._dislike;
-  const pct = tot > 0 ? Math.round((segnalazioneAttiva._like/tot)*100) : 50;
+  const tot = segnalazioneAttiva._like+segnalazioneAttiva._dislike;
+  const pct = tot>0 ? Math.round((segnalazioneAttiva._like/tot)*100) : 50;
   const neg = segnalazioneAttiva._like < segnalazioneAttiva._dislike;
 
   let body = '';
   if (segnalazioneAttiva.foto_url) body += `<img class="detail-img" src="${segnalazioneAttiva.foto_url}">`;
   if (segnalazioneAttiva.descrizione) body += `<p class="detail-desc">${segnalazioneAttiva.descrizione}</p>`;
-  if (tot > 0) body += `
+  if (tot>0) body += `
     <div style="margin-bottom:14px">
       <div style="font-size:0.78rem;color:var(--ink-soft);margin-bottom:4px">Consenso: ${pct}% favorevoli (${tot} voti totali)</div>
       <div class="score-bar" style="height:6px"><div class="score-fill ${neg?'negative':''}" style="width:${pct}%"></div></div>
@@ -561,10 +668,15 @@ async function apriDettaglio(id) {
   if (!commenti||!commenti.length) {
     body += `<div style="font-size:0.82rem;color:var(--ink-soft)">Nessun commento ancora.</div>`;
   } else {
-    body += commenti.map(c => `<div class="comment"><div class="comment-meta">Cittadino · ${timeAgo(c.created_at)}</div>${c.testo}</div>`).join('');
+    body += commenti.map(c=>`<div class="comment"><div class="comment-meta">Cittadino · ${timeAgo(c.created_at)}</div>${c.testo}</div>`).join('');
   }
 
   document.getElementById('detailBody').innerHTML = body;
+
+  // Aggiorna URL con deep link
+  const newUrl = `${window.location.pathname}?s=${id}`;
+  history.replaceState(null, '', newUrl);
+
   showPanel('dettaglio');
 }
 
@@ -576,19 +688,19 @@ async function toggleVoto(tipo) {
 }
 
 async function toggleVotoCard(id, tipo) {
-  const s = segnalazioni.find(x => x.id === id);
+  const s = segnalazioni.find(x=>x.id===id);
   if (!s) return;
-  const haVotato = tipo === 'like' ? s._mioLike : s._mioDislike;
+  const haVotato = tipo==='like' ? s._mioLike : s._mioDislike;
 
   if (haVotato) {
-    await db.from('voti').delete().eq('segnalazione_id', id).eq('autore_id', ME).eq('tipo', tipo);
-    if (tipo==='like') { s._like = Math.max(0, s._like-1); s._mioLike = false; }
-    else { s._dislike = Math.max(0, s._dislike-1); s._mioDislike = false; }
+    await db.from('voti').delete().eq('segnalazione_id',id).eq('autore_id',ME).eq('tipo',tipo);
+    if (tipo==='like') { s._like=Math.max(0,s._like-1); s._mioLike=false; }
+    else { s._dislike=Math.max(0,s._dislike-1); s._mioDislike=false; }
   } else {
-    const { error } = await db.from('voti').insert({ segnalazione_id: id, autore_id: ME, tipo });
+    const { error } = await db.from('voti').insert({ segnalazione_id:id, autore_id:ME, tipo });
     if (error) { showToast('Hai già espresso questo voto'); return; }
-    if (tipo==='like') { s._like++; s._mioLike = true; }
-    else { s._dislike++; s._mioDislike = true; }
+    if (tipo==='like') { s._like++; s._mioLike=true; }
+    else { s._dislike++; s._mioDislike=true; }
   }
   aggiungiMarker(s);
   renderLista();
@@ -597,8 +709,8 @@ async function toggleVotoCard(id, tipo) {
 // ─── COMMENTO ────────────────────────────────────────────────────────────────
 async function inviaCommento() {
   const testo = document.getElementById('commentInput').value.trim();
-  if (!testo || !segnalazioneAttiva) return;
-  const { error } = await db.from('commenti').insert({ segnalazione_id: segnalazioneAttiva.id, autore_id: ME, testo });
+  if (!testo||!segnalazioneAttiva) return;
+  const { error } = await db.from('commenti').insert({ segnalazione_id:segnalazioneAttiva.id, autore_id:ME, testo });
   if (error) { showToast('Errore nell\'invio del commento'); return; }
   document.getElementById('commentInput').value = '';
   showToast('Commento inviato!');
@@ -642,7 +754,7 @@ function previewFoto(e) {
   const file = e.target.files[0];
   if (!file) return;
   const reader = new FileReader();
-  reader.onload = ev => { const img = document.getElementById('fotoPreview'); img.src = ev.target.result; img.style.display = 'block'; };
+  reader.onload = ev => { const img=document.getElementById('fotoPreview'); img.src=ev.target.result; img.style.display='block'; };
   reader.readAsDataURL(file);
 }
 
@@ -688,27 +800,28 @@ function showPanel(name) {
   document.getElementById('tab-lista').classList.remove('active');
   document.getElementById('tab-nuova').classList.remove('active');
 
-  if (name === 'lista') {
+  if (name==='lista') {
     document.getElementById('panelLista').style.display = 'block';
     document.getElementById('filterBar').style.display = 'flex';
     document.getElementById('tab-lista').classList.add('active');
-  } else if (name === 'dettaglio') {
+    history.replaceState(null,'',window.location.pathname);
+  } else if (name==='dettaglio') {
     document.getElementById('panelDettaglio').classList.add('active');
     document.getElementById('tab-lista').classList.add('active');
-  } else if (name === 'nuova') {
+  } else if (name==='nuova') {
     document.getElementById('panelNuova').classList.add('active');
     document.getElementById('tab-nuova').classList.add('active');
   }
 }
 
 function toggleView(n) { showPanel(n); }
-function backToLista() { segnalazioneAttiva = null; showPanel('lista'); renderLista(); }
+function backToLista() { segnalazioneAttiva=null; showPanel('lista'); renderLista(); }
 
 function timeAgo(ts) {
-  const diff = Math.floor((new Date() - new Date(ts)) / 1000);
-  if (diff < 60) return 'adesso';
-  if (diff < 3600) return `${Math.floor(diff/60)}m fa`;
-  if (diff < 86400) return `${Math.floor(diff/3600)}h fa`;
+  const diff = Math.floor((new Date()-new Date(ts))/1000);
+  if (diff<60) return 'adesso';
+  if (diff<3600) return `${Math.floor(diff/60)}m fa`;
+  if (diff<86400) return `${Math.floor(diff/3600)}h fa`;
   return `${Math.floor(diff/86400)}g fa`;
 }
 
@@ -720,11 +833,11 @@ function showToast(msg) {
 }
 
 // ─── REALTIME ────────────────────────────────────────────────────────────────
-db.channel('segnalazioni_live')
-  .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'segnalazioni' }, payload => {
+db.channel('heycomune_live')
+  .on('postgres_changes', { event:'INSERT', schema:'public', table:'segnalazioni' }, payload => {
     const s = payload.new;
     s._like=0; s._dislike=0; s._mioLike=false; s._mioDislike=false;
-    if (!segnalazioni.find(x => x.id === s.id)) {
+    if (!segnalazioni.find(x=>x.id===s.id)) {
       segnalazioni.unshift(s);
       aggiungiMarker(s);
       document.getElementById('countBadge').textContent = segnalazioni.length;
