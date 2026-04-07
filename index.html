@@ -5,25 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HeyComune — Segnalazioni cittadine</title>
 
-<!-- SEO -->
 <meta name="description" content="Segnala problemi nella tua città, vota le priorità e aiuta il comune a intervenire dove serve davvero.">
 <meta name="theme-color" content="#d4380d">
-
-<!-- Open Graph (Facebook, WhatsApp, Telegram) -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="HeyComune 📍 — Segnalazioni cittadine">
 <meta property="og:description" content="Segnala buche, problemi di illuminazione, rifiuti e altro. Vota le priorità e aiuta il comune a intervenire dove serve davvero.">
-<meta property="og:image" content="https://og-image-generator.vercel.app/api/og?title=HeyComune&subtitle=Segnalazioni+cittadine&emoji=%F0%9F%93%8D">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
 <meta property="og:locale" content="it_IT">
-
-<!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="HeyComune 📍 — Segnalazioni cittadine">
 <meta name="twitter:description" content="Segnala problemi nella tua città, vota le priorità e aiuta il comune a intervenire dove serve davvero.">
-
-<!-- Favicon emoji -->
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📍</text></svg>">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -76,17 +66,7 @@
     z-index: 1000;
   }
 
-  .logo {
-    font-family: var(--font-display);
-    font-size: 1.25rem;
-    color: var(--ink);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-  }
-
-  .logo-icon { font-size: 1.1rem; }
+  .logo { font-family: var(--font-display); font-size: 1.25rem; color: var(--ink); display: flex; align-items: center; gap: 8px; }
   .header-actions { display: flex; gap: 8px; align-items: center; }
 
   .btn {
@@ -104,7 +84,7 @@
   #map { flex: 1; z-index: 1; }
 
   .sidebar {
-    width: 360px; background: var(--surface);
+    width: 380px; background: var(--surface);
     border-left: 1px solid var(--border);
     display: flex; flex-direction: column;
     overflow: hidden; flex-shrink: 0;
@@ -121,11 +101,32 @@
   }
   .tab.active { color: var(--accent); border-bottom-color: var(--accent); background: var(--accent-soft); }
 
-  .filter-bar {
-    padding: 10px 16px; border-bottom: 1px solid var(--border);
-    display: flex; gap: 6px; overflow-x: auto; flex-shrink: 0; scrollbar-width: none;
+  /* FILTER SECTION */
+  .filter-section {
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    display: none;
   }
-  .filter-bar::-webkit-scrollbar { display: none; }
+
+  .filter-group {
+    padding: 8px 12px 6px;
+    display: flex;
+    gap: 5px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    align-items: center;
+  }
+  .filter-group::-webkit-scrollbar { display: none; }
+
+  .filter-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    flex-shrink: 0;
+    padding-right: 4px;
+  }
 
   .filter-chip {
     flex-shrink: 0; font-size: 0.75rem; font-weight: 600;
@@ -134,6 +135,17 @@
     font-family: var(--font-body); transition: all 0.15s; white-space: nowrap;
   }
   .filter-chip.active { background: var(--ink); color: white; border-color: var(--ink); }
+  .filter-chip.comune-chip.active { background: #1e40af; border-color: #1e40af; color: white; }
+
+  .filter-divider { height: 1px; background: var(--border); margin: 0 12px; }
+
+  /* WRAP CHIPS per categoria — tutte visibili */
+  .filter-group.wrap {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    padding-bottom: 8px;
+    row-gap: 5px;
+  }
 
   .sidebar-content { flex: 1; overflow-y: auto; padding: 16px; }
 
@@ -144,10 +156,26 @@
   }
   .card:hover { border-color: var(--accent-border); box-shadow: var(--shadow); transform: translateY(-1px); }
 
+  /* CARD HEADER ROW: categoria + comune sulla stessa riga */
+  .card-top {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+
   .card-cat {
     display: inline-flex; align-items: center; gap: 4px;
     font-size: 0.72rem; font-weight: 600; padding: 3px 8px;
-    border-radius: 20px; margin-bottom: 8px;
+    border-radius: 20px;
+  }
+
+  .card-comune {
+    display: inline-flex; align-items: center; gap: 3px;
+    font-size: 0.72rem; font-weight: 600; padding: 3px 8px;
+    border-radius: 20px;
+    background: #dbeafe; color: #1e40af;
   }
 
   .card-title { font-family: var(--font-display); font-size: 1rem; margin-bottom: 4px; line-height: 1.3; }
@@ -174,7 +202,6 @@
 
   .card-img { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; }
 
-  /* SHARE BUTTON */
   .share-btn {
     display: flex; align-items: center; gap: 4px;
     background: none; border: none; cursor: pointer;
@@ -198,10 +225,7 @@
   .detail-title { font-family: var(--font-display); font-size: 1.3rem; line-height: 1.3; margin-bottom: 10px; }
   .detail-stats { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
 
-  .stat-pill {
-    display: flex; align-items: center; gap: 5px; background: var(--bg);
-    border-radius: 20px; padding: 5px 12px; font-size: 0.8rem; font-weight: 600;
-  }
+  .stat-pill { display: flex; align-items: center; gap: 5px; background: var(--bg); border-radius: 20px; padding: 5px 12px; font-size: 0.8rem; font-weight: 600; }
 
   .vote-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
   .detail-body { flex: 1; overflow-y: auto; padding: 16px; }
@@ -245,6 +269,11 @@
   .file-label:hover { border-color: var(--accent-border); color: var(--accent); }
   .foto-preview { width: 100%; border-radius: 8px; margin-top: 8px; display: none; }
 
+  .comune-preview {
+    margin-top: 6px; font-size: 0.82rem; color: #1e40af; font-weight: 600;
+    min-height: 20px;
+  }
+
   .cat-buche         { background: #fef3c7; color: #92400e; }
   .cat-illuminazione { background: #ede9fe; color: #5b21b6; }
   .cat-rifiuti       { background: #d1fae5; color: #065f46; }
@@ -284,33 +313,22 @@
   .popup-votes { font-size: 0.76rem; color: #888; margin-bottom: 6px; }
   .popup-open { font-size: 0.78rem; color: var(--accent); font-weight: 600; cursor: pointer; background: none; border: none; padding: 0; font-family: var(--font-body); }
 
-  /* ONBOARDING BANNER */
-  .onboarding {
-    background: linear-gradient(135deg, var(--accent-soft) 0%, #fff8f0 100%);
-    border: 1px solid var(--accent-border);
-    border-radius: var(--radius);
-    padding: 14px;
-    margin-bottom: 14px;
-    position: relative;
-  }
+  .onboarding { background: linear-gradient(135deg, var(--accent-soft) 0%, #fff8f0 100%); border: 1px solid var(--accent-border); border-radius: var(--radius); padding: 14px; margin-bottom: 14px; position: relative; }
   .onboarding-title { font-family: var(--font-display); font-size: 1rem; margin-bottom:4px; }
   .onboarding-desc { font-size: 0.82rem; color: var(--ink-soft); line-height: 1.5; }
   .onboarding-close { position: absolute; top: 10px; right: 10px; background: none; border: none; cursor: pointer; font-size: 1rem; color: var(--ink-soft); }
 
   @media (max-width: 640px) {
-    .sidebar { position: fixed; bottom: 0; left: 0; right: 0; width: 100%; height: 52dvh; border-left: none; border-top: 1px solid var(--border); border-radius: 16px 16px 0 0; z-index: 900; }
+    .sidebar { position: fixed; bottom: 0; left: 0; right: 0; width: 100%; height: 55dvh; border-left: none; border-top: 1px solid var(--border); border-radius: 16px 16px 0 0; z-index: 900; }
     .app-body { flex-direction: column; }
-    #map { flex: 1; min-height: 48dvh; }
+    #map { flex: 1; min-height: 45dvh; }
   }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">
-    <span class="logo-icon">📍</span>
-    HeyComune
-  </div>
+  <div class="logo">📍 HeyComune</div>
   <div class="header-actions">
     <button class="btn btn-ghost btn-sm" onclick="condividiSito()">↗ Condividi</button>
     <button class="btn btn-ghost btn-sm" onclick="toggleView('lista')">📋 Lista</button>
@@ -331,18 +349,30 @@
       <button class="tab" id="tab-nuova" onclick="startNuovaSegnalazione()">+ Nuova</button>
     </div>
 
-    <div class="filter-bar" id="filterBar" style="display:none">
-      <button class="filter-chip active" data-cat="tutti" onclick="setFilter('tutti')">Tutte</button>
-      <button class="filter-chip" data-cat="buche" onclick="setFilter('buche')">🕳️ Buche</button>
-      <button class="filter-chip" data-cat="illuminazione" onclick="setFilter('illuminazione')">💡 Illuminazione</button>
-      <button class="filter-chip" data-cat="rifiuti" onclick="setFilter('rifiuti')">🗑️ Rifiuti</button>
-      <button class="filter-chip" data-cat="verde" onclick="setFilter('verde')">🌿 Verde</button>
-      <button class="filter-chip" data-cat="segnaletica" onclick="setFilter('segnaletica')">🚦 Segnaletica</button>
-      <button class="filter-chip" data-cat="accessibilita" onclick="setFilter('accessibilita')">♿ Accessibilità</button>
-      <button class="filter-chip" data-cat="acqua" onclick="setFilter('acqua')">🚿 Acqua</button>
-      <button class="filter-chip" data-cat="cantieri" onclick="setFilter('cantieri')">🚧 Cantieri</button>
-      <button class="filter-chip" data-cat="viabilita" onclick="setFilter('viabilita')">🚗 Viabilità</button>
-      <button class="filter-chip" data-cat="altro" onclick="setFilter('altro')">📌 Altro</button>
+    <!-- FILTRI -->
+    <div class="filter-section" id="filterSection">
+      <!-- Comuni -->
+      <div class="filter-group" id="filterComuni">
+        <span class="filter-label">📍</span>
+        <button class="filter-chip comune-chip active" data-comune="tutti" onclick="setFiltroComune('tutti')">Tutti</button>
+        <!-- popolato dinamicamente -->
+      </div>
+      <div class="filter-divider"></div>
+      <!-- Categorie — wrap per mostrarle tutte -->
+      <div class="filter-group wrap">
+        <span class="filter-label">🏷</span>
+        <button class="filter-chip active" data-cat="tutti" onclick="setFiltroCategoria('tutti')">Tutte</button>
+        <button class="filter-chip" data-cat="buche" onclick="setFiltroCategoria('buche')">🕳️ Buche</button>
+        <button class="filter-chip" data-cat="illuminazione" onclick="setFiltroCategoria('illuminazione')">💡 Illuminazione</button>
+        <button class="filter-chip" data-cat="rifiuti" onclick="setFiltroCategoria('rifiuti')">🗑️ Rifiuti</button>
+        <button class="filter-chip" data-cat="verde" onclick="setFiltroCategoria('verde')">🌿 Verde</button>
+        <button class="filter-chip" data-cat="segnaletica" onclick="setFiltroCategoria('segnaletica')">🚦 Segnaletica</button>
+        <button class="filter-chip" data-cat="accessibilita" onclick="setFiltroCategoria('accessibilita')">♿ Accessibilità</button>
+        <button class="filter-chip" data-cat="acqua" onclick="setFiltroCategoria('acqua')">🚿 Acqua</button>
+        <button class="filter-chip" data-cat="cantieri" onclick="setFiltroCategoria('cantieri')">🚧 Cantieri</button>
+        <button class="filter-chip" data-cat="viabilita" onclick="setFiltroCategoria('viabilita')">🚗 Viabilità</button>
+        <button class="filter-chip" data-cat="altro" onclick="setFiltroCategoria('altro')">📌 Altro</button>
+      </div>
     </div>
 
     <!-- LISTA -->
@@ -372,7 +402,7 @@
         <div class="vote-row">
           <button class="vote-btn like" id="voteBtn" onclick="toggleVoto('like')">👍 Vota</button>
           <button class="vote-btn dislike" id="dislikeBtn" onclick="toggleVoto('dislike')">👎 Non urgente</button>
-          <button class="share-btn" id="shareDettaglioBtn" onclick="condividiSegnalazione()">↗ Condividi</button>
+          <button class="share-btn" onclick="condividiSegnalazione()">↗ Condividi</button>
         </div>
       </div>
       <div class="detail-body" id="detailBody"></div>
@@ -423,6 +453,7 @@
           <button class="btn btn-ghost btn-sm" onclick="usaPosizioneAttuale()">📍 GPS</button>
           <button class="btn btn-ghost btn-sm" onclick="pickOnMap()">🗺️ Mappa</button>
         </div>
+        <div class="comune-preview" id="comunePreview"></div>
       </div>
 
       <div class="form-group">
@@ -448,6 +479,11 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 const { createClient } = supabase;
 const db = createClient(SUPABASE_URL, SUPABASE_KEY);
 
+// Default: Cagliari centro
+const DEFAULT_LAT = 39.2238;
+const DEFAULT_LNG = 9.1217;
+const DEFAULT_ZOOM = 12;
+
 function getUtenteId() {
   let id = localStorage.getItem('heycomune_uid');
   if (!id) { id = crypto.randomUUID(); localStorage.setItem('heycomune_uid', id); }
@@ -459,8 +495,10 @@ let segnalazioni = [];
 let segnalazioneAttiva = null;
 let markers = {};
 let nuovaPosizione = null;
+let nuovoComuneRilevato = null;
 let pickingMode = false;
-let filtroAttivo = 'tutti';
+let filtroComune = 'tutti';
+let filtroCategoria = 'tutti';
 
 const CATEGORIE = {
   buche:         { label: '🕳️ Buche',         emoji: '🕳️' },
@@ -479,59 +517,48 @@ function catLabel(cat) { return (CATEGORIE[cat] || CATEGORIE.altro).label; }
 function catEmoji(cat) { return (CATEGORIE[cat] || CATEGORIE.altro).emoji; }
 function catClass(cat) { return `cat-${cat}`; }
 
-// ─── ONBOARDING ──────────────────────────────────────────────────────────────
-function initOnboarding() {
-  const visto = localStorage.getItem('heycomune_onboarding');
-  if (!visto) document.getElementById('onboardingBanner').style.display = 'block';
-}
-
-function chiudiOnboarding() {
-  document.getElementById('onboardingBanner').style.display = 'none';
-  localStorage.setItem('heycomune_onboarding', '1');
-}
-
-// ─── CONDIVISIONE ────────────────────────────────────────────────────────────
-function condividiSito() {
-  const url = window.location.href.split('?')[0];
-  const testo = '📍 HeyComune — Segnala problemi nella tua città, vota le priorità e aiuta il comune a intervenire dove serve davvero.';
-  if (navigator.share) {
-    navigator.share({ title: 'HeyComune', text: testo, url });
-  } else {
-    navigator.clipboard.writeText(url).then(() => showToast('Link copiato! Condividilo sui social 📋'));
-  }
-}
-
-function condividiSegnalazione() {
-  if (!segnalazioneAttiva) return;
-  const url = `${window.location.href.split('?')[0]}?s=${segnalazioneAttiva.id}`;
-  const testo = `📍 "${segnalazioneAttiva.titolo}" — ${catLabel(segnalazioneAttiva.categoria)} segnalata su HeyComune. Vota anche tu!`;
-  if (navigator.share) {
-    navigator.share({ title: segnalazioneAttiva.titolo, text: testo, url });
-  } else {
-    navigator.clipboard.writeText(`${testo}\n${url}`).then(() => showToast('Link copiato! Incollalo su Facebook 📋'));
-  }
-}
-
-// Deep link: apri direttamente una segnalazione se c'è ?s=id nell'URL
-function checkDeepLink() {
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get('s');
-  if (id) setTimeout(() => apriDettaglio(id), 800);
+// ─── REVERSE GEOCODING ───────────────────────────────────────────────────────
+async function getComune(lat, lng) {
+  try {
+    const res = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&accept-language=it`,
+      { headers: { 'User-Agent': 'HeyComune/1.0' } }
+    );
+    const data = await res.json();
+    return data.address?.municipality
+      || data.address?.city
+      || data.address?.town
+      || data.address?.village
+      || data.address?.county
+      || null;
+  } catch { return null; }
 }
 
 // ─── MAPPA ───────────────────────────────────────────────────────────────────
-const map = L.map('map').setView([41.9028, 12.4964], 13);
+const map = L.map('map').setView([DEFAULT_LAT, DEFAULT_LNG], DEFAULT_ZOOM);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
   maxZoom: 19
 }).addTo(map);
 
-map.on('click', (e) => {
+// Geolocalizzazione al caricamento
+navigator.geolocation?.getCurrentPosition(
+  pos => map.setView([pos.coords.latitude, pos.coords.longitude], 14),
+  () => {} // fallback silenzioso su Cagliari
+);
+
+map.on('click', async (e) => {
   if (!pickingMode) return;
   nuovaPosizione = { lat: e.latlng.lat, lng: e.latlng.lng };
   document.getElementById('locationDisplay').textContent =
     `${nuovaPosizione.lat.toFixed(5)}, ${nuovaPosizione.lng.toFixed(5)}`;
   stopPickMode();
+  // Reverse geocoding per il comune
+  document.getElementById('comunePreview').textContent = '🔍 Rilevazione comune...';
+  nuovoComuneRilevato = await getComune(nuovaPosizione.lat, nuovaPosizione.lng);
+  document.getElementById('comunePreview').textContent = nuovoComuneRilevato
+    ? `📍 Comune: ${nuovoComuneRilevato}`
+    : '⚠️ Comune non rilevato';
 });
 
 function aggiungiMarker(s) {
@@ -543,7 +570,7 @@ function aggiungiMarker(s) {
   const m = L.marker([s.lat, s.lng], { icon }).addTo(map);
   m.bindPopup(`
     <div class="popup-inner">
-      <div class="popup-cat">${catLabel(s.categoria)}</div>
+      <div class="popup-cat">${catLabel(s.categoria)}${s.comune ? ` · ${s.comune}` : ''}</div>
       <div class="popup-title">${s.titolo}</div>
       <div class="popup-votes">👍 ${s._like||0} &nbsp; 👎 ${s._dislike||0}</div>
       <button class="popup-open" onclick="apriDettaglio('${s.id}')">Apri dettaglio →</button>
@@ -575,22 +602,51 @@ async function caricaSegnalazioni() {
 
   document.getElementById('loadingState').style.display = 'none';
   document.getElementById('countBadge').textContent = segnalazioni.length;
-  document.getElementById('filterBar').style.display = 'flex';
+  document.getElementById('filterSection').style.display = 'block';
 
+  aggiornaComuniFilter();
   initOnboarding();
   renderLista();
   segnalazioni.forEach(aggiungiMarker);
   checkDeepLink();
 }
 
-// ─── FILTRO ──────────────────────────────────────────────────────────────────
-function setFilter(cat) {
-  filtroAttivo = cat;
-  document.querySelectorAll('.filter-chip').forEach(c => c.classList.toggle('active', c.dataset.cat===cat));
+// ─── FILTRO COMUNI dinamico ───────────────────────────────────────────────────
+function aggiornaComuniFilter() {
+  const comuni = [...new Set(segnalazioni.map(s => s.comune).filter(Boolean))].sort();
+  const bar = document.getElementById('filterComuni');
+  // Mantieni solo il pulsante "Tutti"
+  bar.innerHTML = `<span class="filter-label">📍</span><button class="filter-chip comune-chip active" data-comune="tutti" onclick="setFiltroComune('tutti')">Tutti</button>`;
+  comuni.forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = 'filter-chip comune-chip';
+    btn.dataset.comune = c;
+    btn.textContent = c;
+    btn.onclick = () => setFiltroComune(c);
+    bar.appendChild(btn);
+  });
+}
+
+// ─── FILTRI ──────────────────────────────────────────────────────────────────
+function setFiltroComune(comune) {
+  filtroComune = comune;
+  document.querySelectorAll('.comune-chip').forEach(c => c.classList.toggle('active', c.dataset.comune === comune));
+  applicaFiltri();
+}
+
+function setFiltroCategoria(cat) {
+  filtroCategoria = cat;
+  document.querySelectorAll('[data-cat]').forEach(c => c.classList.toggle('active', c.dataset.cat === cat));
+  applicaFiltri();
+}
+
+function applicaFiltri() {
   renderLista();
   segnalazioni.forEach(s => {
     if (!markers[s.id]) return;
-    const show = cat==='tutti' || s.categoria===cat;
+    const okComune = filtroComune === 'tutti' || s.comune === filtroComune;
+    const okCat = filtroCategoria === 'tutti' || s.categoria === filtroCategoria;
+    const show = okComune && okCat;
     if (show) { if (!map.hasLayer(markers[s.id])) markers[s.id].addTo(map); }
     else { if (map.hasLayer(markers[s.id])) map.removeLayer(markers[s.id]); }
   });
@@ -598,11 +654,16 @@ function setFilter(cat) {
 
 // ─── RENDER LISTA ────────────────────────────────────────────────────────────
 function renderLista() {
-  const filtrate = filtroAttivo==='tutti' ? segnalazioni : segnalazioni.filter(s=>s.categoria===filtroAttivo);
+  const filtrate = segnalazioni.filter(s => {
+    const okComune = filtroComune === 'tutti' || s.comune === filtroComune;
+    const okCat = filtroCategoria === 'tutti' || s.categoria === filtroCategoria;
+    return okComune && okCat;
+  });
+
   const el = document.getElementById('listaSegnalazioni');
 
   if (!filtrate.length) {
-    el.innerHTML = `<div class="empty"><div class="empty-icon">📍</div><div class="empty-title">Nessuna segnalazione</div><div class="empty-desc">Sii il primo a segnalare un problema nella tua città</div></div>`;
+    el.innerHTML = `<div class="empty"><div class="empty-icon">📍</div><div class="empty-title">Nessuna segnalazione</div><div class="empty-desc">Nessuna segnalazione trovata con i filtri selezionati.</div></div>`;
     return;
   }
 
@@ -613,7 +674,10 @@ function renderLista() {
     return `
       <div class="card" onclick="apriDettaglio('${s.id}')">
         ${s.foto_url ? `<img class="card-img" src="${s.foto_url}" alt="">` : ''}
-        <span class="card-cat ${catClass(s.categoria)}">${catLabel(s.categoria)}</span>
+        <div class="card-top">
+          <span class="card-cat ${catClass(s.categoria)}">${catLabel(s.categoria)}</span>
+          ${s.comune ? `<span class="card-comune">📍 ${s.comune}</span>` : ''}
+        </div>
         <div class="card-title">${s.titolo}</div>
         ${s.descrizione ? `<div class="card-desc">${s.descrizione}</div>` : ''}
         ${tot>0 ? `<div class="score-bar"><div class="score-fill ${neg?'negative':''}" style="width:${pct}%"></div></div>` : ''}
@@ -631,7 +695,7 @@ async function apriDettaglio(id) {
   segnalazioneAttiva = segnalazioni.find(s=>s.id===id);
   if (!segnalazioneAttiva) return;
 
-  map.setView([segnalazioneAttiva.lat, segnalazioneAttiva.lng], 16);
+  map.setView([segnalazioneAttiva.lat, segnalazioneAttiva.lng], 15);
   if (markers[id]) markers[id].openPopup();
 
   const { data: commenti } = await db.from('commenti').select('*').eq('segnalazione_id', id).order('created_at', { ascending: true });
@@ -642,8 +706,11 @@ async function apriDettaglio(id) {
   segnalazioneAttiva._mioLike = (votiData||[]).some(v=>v.autore_id===ME&&v.tipo==='like');
   segnalazioneAttiva._mioDislike = (votiData||[]).some(v=>v.autore_id===ME&&v.tipo==='dislike');
 
+  const comuneTag = segnalazioneAttiva.comune
+    ? `<span class="card-comune" style="margin-left:6px">📍 ${segnalazioneAttiva.comune}</span>` : '';
+
   document.getElementById('detailCat').innerHTML =
-    `<span class="card-cat ${catClass(segnalazioneAttiva.categoria)}" style="margin-bottom:8px">${catLabel(segnalazioneAttiva.categoria)}</span>`;
+    `<div class="card-top" style="margin-bottom:8px"><span class="card-cat ${catClass(segnalazioneAttiva.categoria)}">${catLabel(segnalazioneAttiva.categoria)}</span>${comuneTag}</div>`;
   document.getElementById('detailTitle').textContent = segnalazioneAttiva.titolo;
   document.getElementById('detailLike').textContent = `👍 ${segnalazioneAttiva._like}`;
   document.getElementById('detailDislike').textContent = `👎 ${segnalazioneAttiva._dislike}`;
@@ -672,11 +739,7 @@ async function apriDettaglio(id) {
   }
 
   document.getElementById('detailBody').innerHTML = body;
-
-  // Aggiorna URL con deep link
-  const newUrl = `${window.location.pathname}?s=${id}`;
-  history.replaceState(null, '', newUrl);
-
+  history.replaceState(null, '', `${window.location.pathname}?s=${id}`);
   showPanel('dettaglio');
 }
 
@@ -691,7 +754,6 @@ async function toggleVotoCard(id, tipo) {
   const s = segnalazioni.find(x=>x.id===id);
   if (!s) return;
   const haVotato = tipo==='like' ? s._mioLike : s._mioDislike;
-
   if (haVotato) {
     await db.from('voti').delete().eq('segnalazione_id',id).eq('autore_id',ME).eq('tipo',tipo);
     if (tipo==='like') { s._like=Math.max(0,s._like-1); s._mioLike=false; }
@@ -720,7 +782,9 @@ async function inviaCommento() {
 // ─── NUOVA SEGNALAZIONE ──────────────────────────────────────────────────────
 function startNuovaSegnalazione() {
   nuovaPosizione = null;
+  nuovoComuneRilevato = null;
   document.getElementById('locationDisplay').textContent = 'Nessuna posizione';
+  document.getElementById('comunePreview').textContent = '';
   document.getElementById('fTitolo').value = '';
   document.getElementById('fDescrizione').value = '';
   document.getElementById('fFoto').value = '';
@@ -728,12 +792,19 @@ function startNuovaSegnalazione() {
   showPanel('nuova');
 }
 
-function usaPosizioneAttuale() {
+async function usaPosizioneAttuale() {
   if (!navigator.geolocation) { showToast('GPS non disponibile'); return; }
-  navigator.geolocation.getCurrentPosition(pos => {
+  showToast('Rilevazione posizione...');
+  navigator.geolocation.getCurrentPosition(async pos => {
     nuovaPosizione = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-    document.getElementById('locationDisplay').textContent = `${nuovaPosizione.lat.toFixed(5)}, ${nuovaPosizione.lng.toFixed(5)}`;
-    map.setView([nuovaPosizione.lat, nuovaPosizione.lng], 17);
+    document.getElementById('locationDisplay').textContent =
+      `${nuovaPosizione.lat.toFixed(5)}, ${nuovaPosizione.lng.toFixed(5)}`;
+    map.setView([nuovaPosizione.lat, nuovaPosizione.lng], 16);
+    document.getElementById('comunePreview').textContent = '🔍 Rilevazione comune...';
+    nuovoComuneRilevato = await getComune(nuovaPosizione.lat, nuovaPosizione.lng);
+    document.getElementById('comunePreview').textContent = nuovoComuneRilevato
+      ? `📍 Comune: ${nuovoComuneRilevato}`
+      : '⚠️ Comune non rilevato';
     showToast('Posizione GPS acquisita!');
   }, () => showToast('Impossibile ottenere la posizione'));
 }
@@ -776,7 +847,9 @@ async function inviaForm() {
 
   const { data, error } = await db.from('segnalazioni').insert({
     titolo, descrizione: descrizione||null, categoria,
-    lat: nuovaPosizione.lat, lng: nuovaPosizione.lng, foto_url, autore_id: ME
+    lat: nuovaPosizione.lat, lng: nuovaPosizione.lng,
+    foto_url, autore_id: ME,
+    comune: nuovoComuneRilevato || null
   }).select().single();
 
   if (error) { showToast('Errore nell\'invio'); console.error(error); return; }
@@ -785,16 +858,49 @@ async function inviaForm() {
   segnalazioni.unshift(data);
   aggiungiMarker(data);
   document.getElementById('countBadge').textContent = segnalazioni.length;
+  aggiornaComuniFilter();
   renderLista();
   backToLista();
   showToast('Segnalazione inviata! Grazie 🎉');
-  map.setView([data.lat, data.lng], 16);
+  map.setView([data.lat, data.lng], 15);
+}
+
+// ─── CONDIVISIONE ────────────────────────────────────────────────────────────
+function condividiSito() {
+  const url = window.location.href.split('?')[0];
+  const testo = '📍 HeyComune — Segnala problemi nella tua città, vota le priorità e aiuta il comune a intervenire dove serve davvero.';
+  if (navigator.share) navigator.share({ title: 'HeyComune', text: testo, url });
+  else navigator.clipboard.writeText(url).then(() => showToast('Link copiato! 📋'));
+}
+
+function condividiSegnalazione() {
+  if (!segnalazioneAttiva) return;
+  const url = `${window.location.pathname}?s=${segnalazioneAttiva.id}`;
+  const testo = `📍 "${segnalazioneAttiva.titolo}"${segnalazioneAttiva.comune ? ` a ${segnalazioneAttiva.comune}` : ''} — segnalata su HeyComune. Vota anche tu!`;
+  if (navigator.share) navigator.share({ title: segnalazioneAttiva.titolo, text: testo, url });
+  else navigator.clipboard.writeText(`${testo}\n${url}`).then(() => showToast('Link copiato! Incollalo su Facebook 📋'));
+}
+
+function checkDeepLink() {
+  const id = new URLSearchParams(window.location.search).get('s');
+  if (id) setTimeout(() => apriDettaglio(id), 500);
+}
+
+// ─── ONBOARDING ──────────────────────────────────────────────────────────────
+function initOnboarding() {
+  if (!localStorage.getItem('heycomune_onboarding'))
+    document.getElementById('onboardingBanner').style.display = 'block';
+}
+
+function chiudiOnboarding() {
+  document.getElementById('onboardingBanner').style.display = 'none';
+  localStorage.setItem('heycomune_onboarding', '1');
 }
 
 // ─── NAVIGAZIONE ─────────────────────────────────────────────────────────────
 function showPanel(name) {
   document.getElementById('panelLista').style.display = 'none';
-  document.getElementById('filterBar').style.display = 'none';
+  document.getElementById('filterSection').style.display = 'none';
   document.getElementById('panelDettaglio').classList.remove('active');
   document.getElementById('panelNuova').classList.remove('active');
   document.getElementById('tab-lista').classList.remove('active');
@@ -802,7 +908,7 @@ function showPanel(name) {
 
   if (name==='lista') {
     document.getElementById('panelLista').style.display = 'block';
-    document.getElementById('filterBar').style.display = 'flex';
+    document.getElementById('filterSection').style.display = 'block';
     document.getElementById('tab-lista').classList.add('active');
     history.replaceState(null,'',window.location.pathname);
   } else if (name==='dettaglio') {
@@ -817,6 +923,7 @@ function showPanel(name) {
 function toggleView(n) { showPanel(n); }
 function backToLista() { segnalazioneAttiva=null; showPanel('lista'); renderLista(); }
 
+// ─── HELPERS ─────────────────────────────────────────────────────────────────
 function timeAgo(ts) {
   const diff = Math.floor((new Date()-new Date(ts))/1000);
   if (diff<60) return 'adesso';
@@ -841,10 +948,12 @@ db.channel('heycomune_live')
       segnalazioni.unshift(s);
       aggiungiMarker(s);
       document.getElementById('countBadge').textContent = segnalazioni.length;
+      aggiornaComuniFilter();
       renderLista();
     }
   }).subscribe();
 
+// ─── INIT ────────────────────────────────────────────────────────────────────
 caricaSegnalazioni();
 showPanel('lista');
 </script>
