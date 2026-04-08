@@ -875,7 +875,7 @@ function condividiSito() {
 
 function condividiSegnalazione() {
   if (!segnalazioneAttiva) return;
-  const url = `${window.location.pathname}?s=${segnalazioneAttiva.id}`;
+  const url = `${window.location.origin}${window.location.pathname}?s=${segnalazioneAttiva.id}`;
   const testo = `📍 "${segnalazioneAttiva.titolo}"${segnalazioneAttiva.comune ? ` a ${segnalazioneAttiva.comune}` : ''} — segnalata su HeyComune. Vota anche tu!`;
   if (navigator.share) navigator.share({ title: segnalazioneAttiva.titolo, text: testo, url });
   else navigator.clipboard.writeText(`${testo}\n${url}`).then(() => showToast('Link copiato! Incollalo su Facebook 📋'));
@@ -883,7 +883,7 @@ function condividiSegnalazione() {
 
 function checkDeepLink() {
   const id = new URLSearchParams(window.location.search).get('s');
-  if (id) setTimeout(() => apriDettaglio(id), 500);
+  if (id) apriDettaglio(id); // dati già caricati, nessun timeout necessario
 }
 
 // ─── ONBOARDING ──────────────────────────────────────────────────────────────
