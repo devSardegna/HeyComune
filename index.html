@@ -693,7 +693,13 @@ function renderLista() {
 // ─── DETTAGLIO ───────────────────────────────────────────────────────────────
 async function apriDettaglio(id) {
   segnalazioneAttiva = segnalazioni.find(s=>s.id===id);
-  if (!segnalazioneAttiva) return;
+  // Fallback: carica dal DB se non in memoria (es. deep link diretto)
+  if (!segnalazioneAttiva) {
+    const { data, error } = await db.from('segnalazioni').select('*').eq('id', id).single();
+    if (error || !data) { console.warn('Segnalazione non trovata:', id); return; }
+    data._like = 0; data._dislike = 0; data._mioLike = false; data._mioDislike = false;
+    segnalazioneAttiva = data;
+  }
 
   map.setView([segnalazioneAttiva.lat, segnalazioneAttiva.lng], 15);
   if (markers[id]) markers[id].openPopup();
@@ -882,8 +888,10 @@ function condividiSegnalazione() {
 }
 
 function checkDeepLink() {
-  const id = new URLSearchParams(window.location.search).get('s');
-  if (id) apriDettaglio(id); // dati già caricati, nessun timeout necessario
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('s');
+  console.log('[HeyComune] checkDeepLink id=', id, 'segnalazioni caricate=', segnalazioni.length);
+  if (id) apriDettaglio(id);
 }
 
 // ─── ONBOARDING ──────────────────────────────────────────────────────────────
